@@ -4,6 +4,7 @@
 *.o
 *.obj
 *.mk
+.makepp
 
 # Precompiled Headers
 *.gch
