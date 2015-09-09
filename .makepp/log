@@ -1,0 +1,69 @@
+3/usr/bin/makepp
+VERSION2.0.98.35.18.2x86_64-linux-gnu-thread-multi
+LOAD229f7d8Makefile1b5d470/home/enrico/projects/sat1b5d470
+TRY229f7d8
+USEdefault rule
+DEPEND229f7d8
+UP_TO_DATE229f7d8
+LOAD_DEFAULT22b37d0src1b5d470
+LOAD_INCL22bf998makepp_builtin_rules.mk18c5318/usr/share/makepp22b7ae8makepp_default_makefile.mk18c5318
+LOAD_END22b7ae8
+LOAD_INCL22bf998229f7d8
+LOAD_END229f7d8
+TRY22a9b88all1b5d470
+USE/home/enrico/projects/sat/Makefile:7
+LOAD_DEFAULT22bfa28obj1b5d470
+LOAD_INCL22bf99822b7ae8
+LOAD_END22b7ae8
+SCAN_INFO22a9b88
+LEX_RULE22a9b88info not cached
+PARSEg++ obj/SatProblem.o obj/main.o -o ./bin/sat.app1b5d470/home/enrico/projects/sat/Makefile:7
+TRY23190f8g++2319020/usr/bin
+USEdefault rule
+DEPEND23190f8
+UP_TO_DATE23190f8
+DEPEND22a9b88231ba58sat.app22ef328/home/enrico/projects/sat/bin22ec090SatProblem.o22bfa2823190f822ec3a8main.o22bfa28
+TRY22ec090
+USE/home/enrico/projects/sat/Makefile:10
+SCAN_INFO22ec090
+LEX_RULE22ec090info not cached
+PARSEg++ -g -O0 -std=c++11 -I./inc/ -c src/SatProblem.cc -o obj/SatProblem.o1b5d470/home/enrico/projects/sat/Makefile:10
+TRY22d5fe0SatProblem.cc22b37d0
+USEdefault rule
+DEPEND22d5fe0
+OUT_OF_DATE22d5fe0
+UP_TO_DATE22d5fe0
+SCAN22d5fe0
+INCL22d5fe0235cc38SatProblem.hh22ef400/home/enrico/projects/sat/inc
+TRY235cc38
+LOAD_DEFAULT22ef400
+LOAD_INCL22bf99822b7ae8
+LOAD_END22b7ae8
+USEdefault rule
+DEPEND235cc38
+UP_TO_DATE235cc38
+DEPEND22ec09022d5fe0235cc3823190f8
+BUILD_CMD22ec090|FAILED|g++ -g -O0 -std=c++11 -I./inc/ -c src/SatProblem.cc -o obj/SatProblem.og++ -g -O0 -std=c++11 -I./inc/ -c src/SatProblem.cc -o obj/SatProblem.o
+SUCCESS/home/enrico/projects/sat/Makefile:1022ec090
+TRY22ec3a8
+USE/home/enrico/projects/sat/Makefile:10
+SCAN_INFO22ec3a8
+CACHED_DEP23190f822ec3a8
+CACHED_DEP22d6190main.cc22b37d022ec3a8
+TRY22d6190
+USEdefault rule
+DEPEND22d6190
+OUT_OF_DATE22d6190
+UP_TO_DATE22d6190
+CACHED_DEP235cc3822ec3a8
+BUILD_CHANGED22ec3a8235cc38
+LEX_RULE22ec3a8meta dependencies are out of date
+PARSEg++ -g -O0 -std=c++11 -I./inc/ -c src/main.cc -o obj/main.o1b5d470/home/enrico/projects/sat/Makefile:10
+SCAN22d6190
+INCL22d6190235cc38
+DEPEND22ec3a8235cc3823190f822d6190
+BUILD_CHANGED22ec3a8235cc38
+SUCCESS/home/enrico/projects/sat/Makefile:1022ec3a8
+BUILD_PHONY22a9b88
+SUCCESS/home/enrico/projects/sat/Makefile:722a9b88231ba58
+N_FILES310
