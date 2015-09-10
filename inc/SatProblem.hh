@@ -10,11 +10,13 @@ class SatProblem {
 		SatProblem(std::string filename);
 		std::vector<bool> variables;
 		std::vector<std::vector<int>> clauses;
+		std::vector<unsigned int> weights;
 
 		void printClauses();
 
 	private:
 		void readCNF(std::ifstream& file, const int nclauses);
+		void readWCNF(std::ifstream& file, const int nclauses);
 };
 
 #endif
