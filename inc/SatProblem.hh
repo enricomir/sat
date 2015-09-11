@@ -14,6 +14,8 @@ class SatProblem {
 
 		void printClauses();
 
+		unsigned long getTotalClauseItems();
+
 	private:
 		void readCNF(std::ifstream& file, const int nclauses);
 		void readWCNF(std::ifstream& file, const int nclauses);

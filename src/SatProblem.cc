@@ -1,6 +1,7 @@
 #include "SatProblem.hh"
 #include <iostream>
 #include <sstream>
+#include <numeric>
 
 SatProblem::SatProblem(std::string filename) {
 	std::cout << "c Opening file " << filename << "\n";
@@ -104,3 +105,12 @@ void SatProblem::printClauses() {
 		++i;
 	}
 }
+
+unsigned long SatProblem::getTotalClauseItems() {
+	return std::accumulate(clauses.begin(), clauses.end(), 0,
+			[](unsigned long sum, const std::vector<int>& clause) {
+				return sum + clause.size();
+				}
+			);
+}
+
