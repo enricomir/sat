@@ -100,7 +100,9 @@ void SatProblem::printClauses() {
 		if (weights.size() != 0)
 			std::cout << "(" << weights[i] << ") ";
 		for (auto n: c) {
-			std::cout << n << " ";
+			int abs=(n>0?n:-n);
+			abs--;
+			std::cout << n << "(" << variables[abs] << ") ";
 		}
 		std::cout << "\n";
 		++i;
@@ -123,13 +125,14 @@ int SatProblem::eval() {
 		bool false_clause = true;
 		for (auto i: c) {
 			int abs=(i>0?i:-i);
+			abs--;
 			if (allocated[abs]) {
-				if (i==abs && variables[i]) {
+				if (i==(abs+1) && variables[abs]) {
 					ct = true;
 					sat++;
 					break;
 				}
-				if (i!=abs && !variables[-i]) {
+				if (i!=(abs+1) && !variables[abs]) {
 					ct = true;
 					sat++;
 					break;
@@ -144,4 +147,14 @@ int SatProblem::eval() {
 	true_clauses = sat;
 	false_clauses = unsat;
 	return sat;
+}
+
+void SatProblem::printVars() {
+	std::cout << "c Vars: ";
+	for (int i = 0; i < variables.size(); ++i) {
+		if (allocated[i]) {
+			std::cout << (variables[i]?"":"-") << i+1 << " ";
+		}
+	}
+	std::cout << "\n";
 }

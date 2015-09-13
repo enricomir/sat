@@ -18,6 +18,7 @@ class SatProblem {
 		int eval();
 
 		void printClauses();
+		void printVars();
 
 		unsigned long getTotalClauseItems();
 
