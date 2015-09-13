@@ -11,6 +11,6 @@ I might be working with MaxSAT problem between my usual readings, and any implem
 Building
 ---------------
 Just run
-`$ makepp`
+`$ makepp setup` then `$ makepp [all]`
 The Makefile is useful only for makepp and not for gnu make.
 
