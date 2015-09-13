@@ -117,8 +117,10 @@ unsigned long SatProblem::getTotalClauseItems() {
 
 int SatProblem::eval() {
 	int sat = 0;
+	int unsat = 0;
 	for (auto c: clauses) {
 		bool ct = false;
+		bool false_clause = true;
 		for (auto i: c) {
 			int abs=(i>0?i:-i);
 			if (allocated[abs]) {
@@ -132,9 +134,14 @@ int SatProblem::eval() {
 					sat++;
 					break;
 				}
+			} else {
+				false_clause = false;
 			}
 		}
 		if (ct) continue;
+		if (false_clause) unsat++;
 	}
+	true_clauses = sat;
+	false_clauses = unsat;
 	return sat;
 }

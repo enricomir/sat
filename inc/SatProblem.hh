@@ -13,6 +13,8 @@ class SatProblem {
 		std::vector<std::vector<int>> clauses;
 		std::vector<unsigned int> weights;
 
+		int true_clauses;
+		int false_clauses;
 		int eval();
 
 		void printClauses();

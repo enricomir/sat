@@ -1,6 +1,5 @@
 #include <iostream>
 #include "SatProblem.hh"
-#include "BnB.hh"
 
 int main(int argc, char* argv[]) {
 	if (argc==1) {
