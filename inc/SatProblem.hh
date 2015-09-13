@@ -9,8 +9,11 @@ class SatProblem {
 	public:
 		SatProblem(std::string filename);
 		std::vector<bool> variables;
+		std::vector<bool> allocated;
 		std::vector<std::vector<int>> clauses;
 		std::vector<unsigned int> weights;
+
+		int eval();
 
 		void printClauses();
 

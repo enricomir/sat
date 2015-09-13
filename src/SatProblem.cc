@@ -26,9 +26,10 @@ SatProblem::SatProblem(std::string filename) {
 			iss >> var;
 			iss >> clauses;
 
-			//Create clauses
+			//Create variables
 			for (int i = 0; i < var; ++i) {
 				variables.push_back(false);
+				allocated.push_back(false);
 			}
 
 			//Check for CNF (unweighted maxsat) mode
@@ -114,3 +115,26 @@ unsigned long SatProblem::getTotalClauseItems() {
 			);
 }
 
+int SatProblem::eval() {
+	int sat = 0;
+	for (auto c: clauses) {
+		bool ct = false;
+		for (auto i: c) {
+			int abs=(i>0?i:-i);
+			if (allocated[abs]) {
+				if (i==abs && variables[i]) {
+					ct = true;
+					sat++;
+					break;
+				}
+				if (i!=abs && !variables[-i]) {
+					ct = true;
+					sat++;
+					break;
+				}
+			}
+		}
+		if (ct) continue;
+	}
+	return sat;
+}
