@@ -11,7 +11,7 @@ class BnB {
 		SatProblem best_so_far;
 
 		bool solve(std::chrono::seconds time);
-		bool bnb(SatProblem& s);
+		void bnb(SatProblem& s, int start_var = 0);
 };
 
 #endif

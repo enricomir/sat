@@ -3,7 +3,8 @@
 #include <sstream>
 #include <numeric>
 
-SatProblem::SatProblem(std::string filename) {
+SatProblem::SatProblem(std::string filename) 
+	: true_clauses(0), false_clauses(0) {
 	std::cout << "c Opening file " << filename << "\n";
 	std::ifstream in(filename);
 	std::string str;
@@ -24,12 +25,13 @@ SatProblem::SatProblem(std::string filename) {
 			int var, clauses, top;
 			iss >> mode;
 			iss >> var;
+			nvar = var;
 			iss >> clauses;
 
 			//Create variables
 			for (int i = 0; i < var; ++i) {
-				variables.push_back(false);
-				allocated.push_back(false);
+				variables = dynamic_bitset<>(var*2);
+				allocated = dynamic_bitset<>(var*2);
 			}
 
 			//Check for CNF (unweighted maxsat) mode
@@ -59,17 +61,21 @@ void SatProblem::readCNF(std::ifstream& file, const int nclauses) {
 		std::getline(file, str);
 		std::istringstream iss(str);
 
-		clauses.emplace_back();
+		clauses.emplace_back(nvar*2);
 		int n;
 		iss >> n;
 		while (n != 0) {
-			clauses[i].push_back(n);
+			int abs = n>0 ? n : -n;
+			int sign = n>0? 0 : 1;
+			abs--;
+			clauses[i][abs*2+sign] = 1;
 			iss >> n;
 		}
 	}
 }
 
 void SatProblem::readWCNF(std::ifstream& file, const int nclauses) {
+	/* TODO: future fix for bitset
 	std::string str;
 	for (int i = 0; i < nclauses; ++i) {
 		std::getline(file, str);
@@ -91,70 +97,92 @@ void SatProblem::readWCNF(std::ifstream& file, const int nclauses) {
 			iss >> n;
 		}
 	}
+	*/
 }
 
 void SatProblem::printClauses() {
 	int i = 0;
 	for (auto c: clauses) {
 		std::cout << "c Clause " << i << ": ";
-		if (weights.size() != 0)
+		if (weights.size() != 0) {
 			std::cout << "(" << weights[i] << ") ";
-		for (auto n: c) {
-			int abs=(n>0?n:-n);
-			abs--;
-			std::cout << n << "(" << variables[abs] << ") ";
 		}
-		std::cout << "\n";
+
+		std::cout << c << "\n";
 		++i;
 	}
 }
 
 unsigned long SatProblem::getTotalClauseItems() {
-	return std::accumulate(clauses.begin(), clauses.end(), 0,
+	/* TODO return std::accumulate(clauses.begin(), clauses.end(), 0,
 			[](unsigned long sum, const std::vector<int>& clause) {
-				return sum + clause.size();
-				}
-			);
+			return sum + clause.size();
+			}
+			);*/
+	return 0;
+}
+
+void SatProblem::set(int var, bool value) {
+#ifdef DEBUG_SAT_SET
+	std::cout << "c Setting var=" << var << " / value=" << value 
+						<< " nvar=" << nvar << "\n";
+	std::cout << "c vars size=" << variables.size() 
+						<< "/alloc=" << allocated.size() << "\n";
+#endif
+	variables[var*2]=value;
+	variables[var*2+1]=!value;
+	allocated[var*2]=true;
+	allocated[var*2+1]=true;
+	eval();
+}
+
+void SatProblem::unset(int var) {
+	variables[var*2]=false;
+	variables[var*2+1]=false;
+	allocated[var*2]=false;
+	allocated[var*2+1]=false;
 }
 
 int SatProblem::eval() {
 	int sat = 0;
 	int unsat = 0;
 	for (auto c: clauses) {
-		bool ct = false;
 		bool false_clause = true;
-		for (auto i: c) {
-			int abs=(i>0?i:-i);
-			abs--;
-			if (allocated[abs]) {
-				if (i==(abs+1) && variables[abs]) {
-					ct = true;
-					sat++;
-					break;
-				}
-				if (i!=(abs+1) && !variables[abs]) {
-					ct = true;
-					sat++;
-					break;
-				}
-			} else {
-				false_clause = false;
-			}
+
+		dynamic_bitset<> res = variables & c;
+
+#ifdef DEBUG_SAT_EVAL
+		std::cout << "--------------------------\n"
+			        << "c var=" << variables << "\n"
+							<< "c cls=" << c << "\n"
+							<< "c res=" << res << "\n";
+#endif
+
+		if (res.any()) {
+			sat++;
+			continue;
 		}
-		if (ct) continue;
-		if (false_clause) unsat++;
+		res = c & (~allocated);
+		if (!res.any()) unsat++;
 	}
 	true_clauses = sat;
 	false_clauses = unsat;
 	return sat;
 }
 
+void SatProblem::reset() {
+	variables.reset();
+	allocated.reset();
+}
+
 void SatProblem::printVars() {
+	// TODO
+	/*
 	std::cout << "c Vars: ";
 	for (int i = 0; i < variables.size(); ++i) {
 		if (allocated[i]) {
 			std::cout << (variables[i]?"":"-") << i+1 << " ";
 		}
 	}
-	std::cout << "\n";
+	std::cout << "\n"; */
 }

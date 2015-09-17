@@ -12,10 +12,22 @@ int main(int argc, char* argv[]) {
 	SatProblem p(argv[1]);
 	p.printClauses();
 
+	/*
+	std::cout << "c true=" << p.true_clauses << " / false=" << p.false_clauses
+		<< "\n";
+
+	for (int i = 0; i < p.nvar; ++i) {
+		p.set(i,true);
+	}
+
+	std::cout << "c true=" << p.true_clauses << " / false=" << p.false_clauses
+		<< "\n";
+
+		*/
+
 	BnB c(p);
 
 	c.solve(std::chrono::seconds(5));
-	c.best_so_far.eval();
 	std::cout << "c BestVars \n";
 	c.best_so_far.printVars();
 	std::cout << "c BestMax: " << c.best_so_far.true_clauses << "\n";

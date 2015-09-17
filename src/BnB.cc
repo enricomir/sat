@@ -7,54 +7,45 @@ BnB::BnB(const SatProblem& s) : best_so_far(s) {
 
 bool BnB::solve(std::chrono::seconds time) {
 	SatProblem s(best_so_far);
-	for (auto b: s.allocated) b = false;
+	s.reset();
 	bnb(s);
 
 	return true;
 }
 
-bool BnB::bnb(SatProblem& s) {
-	//Assume it is a complete solution
-	bool complete = true;
+void BnB::bnb(SatProblem& s, int start_var) {
+	if (start_var >= s.nvar) return;
 
 #ifdef DEBUG_BNB
 	std::cout << "-----------------------------------\n";
 	std::cout << "c Evaluating: \n";
 	s.printVars();
-	std::cout << "c SAT = " << s.eval() << "\n";
+	std::cout << "c SAT = " << s.true_clauses << "\n";
 #endif
-	if (s.eval() > best_so_far.eval()) {
+
+	if (s.true_clauses > best_so_far.true_clauses) {
 		best_so_far = s;
-		std::cout << "c BnB: revised best. S=" << s.eval() << "/BSF=" << best_so_far.eval() << "\n";
+		std::cout << "c BnB: revised best. S=" << s.true_clauses << "\n";
 	}
-#ifdef DEBUG_BNB
+
 	//Aborts if can't be better than the actual best
-	std::cout << "c BSF: " << best_so_far.eval()
+#ifdef DEBUG_BNB
+	std::cout << "c BSF: " << best_so_far.true_clauses
 						<< "  LIM: " << (s.clauses.size() - s.false_clauses) << "\n";
 #endif
-	if (best_so_far.eval() >= (s.clauses.size() - s.false_clauses)) {
-		return false;
-	}
-	//Loop variables
-	for (int i = 0; i < s.variables.size(); ++i) {
-		//Continue if allocated
-		if (s.allocated[i] == true) continue;
 
-		//If not, this is a partial solution
-		complete = false;
-
-
-		//Assign first value to variables
-		s.variables[i] = true;
-		s.allocated[i] = true;
-		bnb(s);
-
-		//Assign second value to variables
-		s.variables[i] = false;
-		bnb(s);
-		s.allocated[i] = false;
-		break;
+	if (best_so_far.true_clauses >= (s.clauses.size() - s.false_clauses)) {
+		return;
 	}
 
-	return false;
+	//Assign first value to variables
+	s.set(start_var,true);
+	bnb(s, start_var+1);
+
+	//Assign second value to variables
+	s.set(start_var,false);
+	bnb(s, start_var+1);
+	s.unset(start_var);
+
+	return;
 }
