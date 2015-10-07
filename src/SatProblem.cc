@@ -4,7 +4,9 @@
 #include <numeric>
 
 SatProblem::SatProblem(std::string filename) {
+#ifdef DEBUG_SATPROBLEM_CTOR
 	std::cout << "c Opening file " << filename << "\n";
+#endif
 	std::ifstream in(filename);
 	std::string str;
 	while (std::getline(in, str)) {
@@ -34,7 +36,9 @@ SatProblem::SatProblem(std::string filename) {
 
 			//Check for CNF (unweighted maxsat) mode
 			if (mode==std::string("cnf")) {
+#ifdef DEBUG_SATPROBLEM_CTOR
 				std::cout << "c CNF file var=" << var << " clauses=" << clauses << "\n";
+#endif
 				readCNF(in, clauses);
 				return;
 			}

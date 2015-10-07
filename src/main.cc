@@ -3,7 +3,7 @@
 #include "SatProblem.hh"
 #include "BnB.hh"
 
-int main(int argc, char* argv[]) {
+int old_main(int argc, char* argv[]) {
 	if (argc==1) {
 		std::cerr << "Error! Usage: ./sat.app <filename>" << std::endl;
 		return 1;
