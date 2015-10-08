@@ -6,6 +6,7 @@
 #include <eo>
 #include <ga.h>
 #include <utils/eoRNG.h>
+#include <eoSecondsElapsedContinue.h>
 
 namespace eo {
 	extern eoRng rng;
@@ -35,6 +36,17 @@ double maxsat(const Indi& _indi) {
 	return p.eval();
 }
 
+double minsat(const Indi& _indi) {
+	SatProblem p(filename);
+	for (int i = 0; i < _indi.size(); ++i) {
+		p.variables[i] = _indi[i];
+		p.allocated[i] = true;
+	}
+
+	p.eval();
+	return p.false_clauses;
+}
+
 void main_function(int argc, char** argv) {
 	//Parameters hard-coded
 	
@@ -44,7 +56,7 @@ void main_function(int argc, char** argv) {
 	const unsigned int SEED = 42;     //Seed
 	const unsigned int T_SIZE = 3;    //Tournament size
 	const unsigned int VEC_SIZE = p.variables.size();  //Number of bits in genotype
-	const unsigned int POP_SIZE = 30; //Pop Size
+	const unsigned int POP_SIZE = 100; //Pop Size
 	const unsigned int MAX_GEN = 100; //Max gen to stop
 	const     float CROSS_RATE=0.8;   //Crossover rate
 	const double P_MUT_PER_BUT = 0.01;//Probability bitflip
@@ -84,7 +96,8 @@ void main_function(int argc, char** argv) {
 	eoBitMutation<Indi> mutation(P_MUT_PER_BUT);
 
 	//Termination condition
-	eoGenContinue<Indi> continuator(MAX_GEN);
+	//eoGenContinue<Indi> continuator(MAX_GEN);
+	eoSecondsElapsedContinue<Indi> continuator(60);
 
 	//StardardGA = SGA
 	eoSGA<Indi> gga(select, xover, CROSS_RATE, mutation, MUT_RATE, eval, continuator);
