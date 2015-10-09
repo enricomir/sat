@@ -4,8 +4,13 @@ CXXFLAGS := -g -O2 -std=c++11
 INCLUDES := -I./inc/ -I/usr/include/paradiseo -I/usr/include/paradiseo/eo
 LIBS := /usr/lib64/libcma.a /usr/lib64/libeo.a /usr/lib64/libeoutils.a /usr/lib64/libes.a /usr/lib64/libga.a /usr/lib64/libmoeo.a
 
-$(phony all): obj/*.o
-	$(CXX) $(inputs) -o ./bin/sat.app $(LIBS)
+GASRC := obj/SatProblem.o obj/bitga.o
+GABIN := ga.app
+
+$(phony all): ga
+
+$(phony ga): $(GASRC)
+	$(CXX) $(inputs) -o ./bin/$(GABIN) $(LIBS)
 
 obj/%.o: src/%.cc
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $(input) -o $(output)
