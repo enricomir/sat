@@ -2,9 +2,8 @@
 #include <iostream>
 #include <strstream>
 #include "SatProblem.hh"
+#include "bitga.h"
 
-#include <eo>
-#include <ga.h>
 #include <utils/eoRNG.h>
 #include <eoSecondsElapsedContinue.h>
 
@@ -15,8 +14,6 @@ namespace eo {
 using namespace std;
 using eo::rng;
 
-//Individual type: Bitstring
-typedef eoBit<double> Indi;
 
 std::string filename;
 
@@ -108,18 +105,9 @@ void run_ga(const unsigned int seed, SatProblem& p) {
 	cout << filename << " " << maxsat(pop[0]) << "\n";
 }
 
-void main_function(int argc, char** argv) {
+void ga_main_function(int argc, char** argv) {
 	filename=argv[1];
 	SatProblem p(filename);
 	run_ga(42, p);
-}
-
-int main(int argc, char** argv) {
-	try {
-		main_function(argc,argv);
-	} catch (exception& e) {
-		cout << "Exception: " << e.what() << '\n';
-	}
-	return 1;
 }
 

@@ -1,9 +1,24 @@
 #include <iostream>
 #include <chrono>
+#include <stdexcept>
 #include "SatProblem.hh"
 #include "BnB.hh"
+#include "bitga.h"
+#include "binarypso.h"
 
-int old_main(int argc, char* argv[]) {
+int main(int argc, char** argv) {
+	try {
+		//ga_main_function(argc, argv);
+		pso_main_function(argc, argv);
+	} catch (std::exception& e) {
+		std::cout << "Exception: " << e.what() << '\n';
+	}
+	return 1;
+}
+
+
+
+int bnb_main(int argc, char* argv[]) {
 	if (argc==1) {
 		std::cerr << "Error! Usage: ./sat.app <filename>" << std::endl;
 		return 1;
