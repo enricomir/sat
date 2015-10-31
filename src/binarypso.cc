@@ -9,6 +9,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <sqlite3.h>
 
 #include "binarypso.h"
 #include "SatProblem.hh"
@@ -18,27 +19,12 @@
 // Use functions from namespace std
 using namespace std;
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 std::string myfilename;
+std::string problem_category;
+std::string problem_name;
 
-// EVALFUNC
-//-----------------------------------------------------------------------------
-// Just a simple function that takes binary value of a chromosome and sets
-// the fitness
 double binary_value (const Particle & _particle)
 {
-	SatProblem p(myfilename);
-	for (int i = 0; i < _particle.size(); ++i) {
-		p.variables[i] = _particle[i];
-		p.allocated[i] = true;
-	}
-
-	return p.eval();
-}
-
-double minsat(const Particle& _particle) {
 	SatProblem p(myfilename);
 	for (int i = 0; i < _particle.size(); ++i) {
 		p.variables[i] = _particle[i];
@@ -49,13 +35,57 @@ double minsat(const Particle& _particle) {
 	return p.false_clauses;
 }
 
-void run_pso(const unsigned int seed, SatProblem& p)
-{
-	// PARAMETRES
-	// all parameters are hard-coded!
-	const unsigned int SEED = seed;	// seed for random number generator
+void save(
+		double result, 
+		unsigned int n_size, 
+		unsigned int pop,
+		double inertia, 
+		double l1, 
+		double l2) {
 
-	const unsigned int MAX_GEN=500;
+	std::string query;
+	query  = "insert into pso values(\"";
+	query += problem_category;
+
+	query += "\",\"";
+	query += problem_name;
+
+	query += "\", \"ring\", ";
+
+	query += to_string(n_size);
+	query += ", ";
+
+	query += to_string(pop);
+	query += ", ";
+
+	query += to_string(inertia);
+	query += ", ";
+
+	query += to_string(l1);
+	query += ", ";
+
+	query += to_string(l2);
+	query += ", ";
+
+	query += to_string(result);
+	query += ")";
+
+	cout << "\n" << query << "\n";
+
+	sqlite3* db;
+	while (sqlite3_open("results/results.db", &db)!=SQLITE_OK) ;
+
+	sqlite3_stmt* stmt;
+	while (sqlite3_prepare(db, query.c_str(), -1, &stmt, NULL)!=SQLITE_OK);
+
+	while (sqlite3_step(stmt)!=SQLITE_DONE);
+
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+}
+
+void run_pso(SatProblem& p)
+{
 	const unsigned int VEC_SIZE = p.variables.size();
 	const unsigned int POP_SIZE = 20;
 	const unsigned int NEIGHBORHOOD_SIZE= 3;
@@ -70,34 +100,17 @@ void run_pso(const unsigned int seed, SatProblem& p)
 	const double LEARNING_FACTOR1= 1.7;
 	const double LEARNING_FACTOR2= 2.3;
 
+	//rng.reseed(SEED);
 
-	//////////////////////////
-	//  RANDOM SEED
-	//////////////////////////
-	//reproducible random seed: if you don't change SEED above,
-	// you'll aways get the same result, NOT a random run
-	rng.reseed(SEED);
-
-
-	/// SWARM
 	// population <=> swarm
 	eoPop<Particle> pop;
 
-	/// EVALUATION
 	// Evaluation: from a plain C++ fn to an EvalFunc Object
 	eoEvalFuncPtr<Particle, double, const Particle& > eval(  binary_value );
 
-
-	///////////////
-	/// TOPOLOGY
-	//////////////
 	// ring topology
 	eoRingTopology<Particle> topology(NEIGHBORHOOD_SIZE);
 
-
-	/////////////////////
-	// INITIALIZATION
-	////////////////////
 	// position initialization
 	eoUniformGenerator<bool> uGen;
 	eoInitFixedLength < Particle > random (VEC_SIZE, uGen);
@@ -107,83 +120,44 @@ void run_pso(const unsigned int seed, SatProblem& p)
 	eoUniformGenerator < double >sGen (VELOCITY_INIT_MIN, VELOCITY_INIT_MAX);
 	eoVelocityInitFixedLength < Particle > veloRandom (VEC_SIZE, sGen);
 
-	// first best position initialization component
 	eoFirstIsBestInit < Particle > localInit;
 
-	// Create an eoInitialier that:
-	// 		- performs a first evaluation of the particles
-	//  	- initializes the velocities
-	//  	- the first best positions of each particle
-	// 		- setups the topology
 	eoInitializer <Particle> fullInit(eval,veloRandom,localInit,topology,pop);
 
-	// Full initialization here to be able to print the initial population
-	// Else: give the "init" component in the eoEasyPSO constructor
 	fullInit();
 
-	/////////////
-	// OUTPUT
-	////////////
-	// sort pop before printing it!
-	pop.sort();
-
-	// Print (sorted) the initial population (raw printout)
-	/*
-	cout << "INITIAL POPULATION:" << endl;
-	for (unsigned i = 0; i < pop.size(); ++i)
-		cout <<  "\t best fit=" <<  pop[i] <<  endl;*/
-
-
-	///////////////
-	/// VELOCITY
-	//////////////
-	// Create the bounds for the velocity not go to far away
 	eoRealVectorBounds bnds(VEC_SIZE,VELOCITY_MIN,VELOCITY_MAX);
 
-	// the velocity itself that needs the topology and a few constants
 	eoStandardVelocity <Particle> velocity (topology,INERTIA,LEARNING_FACTOR1,LEARNING_FACTOR2,bnds);
 
-
-	///////////////
-	/// FLIGHT
-	//////////////
-	// Binary flight based on sigmoid function
 	eoSigBinaryFlight <Particle> flight;
 
-
-	////////////////////////
-	/// STOPPING CRITERIA
-	///////////////////////
-	// the algo will run for MAX_GEN iterations
-	//eoGenContinue <Particle> genCont (MAX_GEN);
-	eoSecondsElapsedContinue<Particle> genCont(60);
-
-
-	// GENERATION
-	/////////////////////////////////////////
-	// the algorithm
-	////////////////////////////////////////
-	// standard PSO requires
-	// stopping criteria, evaluation,velocity, flight
+	eoSecondsElapsedContinue<Particle> genCont(30);
 
 	eoEasyPSO<Particle> pso(genCont, eval, velocity, flight);
-
-	// Apply the algo to the swarm - that's it!
 	pso(pop);
 
-	// OUTPUT
-	// Print (sorted) intial population
 	pop.sort();
-	/*
-	cout << "FINAL POPULATION:" << endl;
-	for (unsigned i = 0; i < pop.size(); ++i)
-		cout <<  "\t best fit=" <<  pop[i] <<  endl; */
+//	cout << myfilename << " " << pop[0].best() << "\n";
 
-	cout << myfilename << " " << pop[0].best() << "\n";
+	save(
+		pop[0].best(), 
+		NEIGHBORHOOD_SIZE,
+		POP_SIZE,
+		INERTIA,
+		LEARNING_FACTOR1,
+		LEARNING_FACTOR2);
 }
 
 void pso_main_function(int argc, char** argv) {
-	myfilename = argv[1];
+	myfilename = "dat/cnf/";
+	myfilename += argv[1];
+	myfilename += "/";
+	myfilename += argv[2];
+
+	problem_category = argv[1];
+	problem_name = argv[2];
+
 	SatProblem p(myfilename);
-	run_pso(42, p);
+	run_pso(p);
 }

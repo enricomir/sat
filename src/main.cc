@@ -13,7 +13,7 @@ int main(int argc, char** argv) {
 	} catch (std::exception& e) {
 		std::cout << "Exception: " << e.what() << '\n';
 	}
-	return 1;
+	return 0;
 }
 
 

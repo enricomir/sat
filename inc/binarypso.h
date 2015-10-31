@@ -3,7 +3,7 @@
 
 #include <eo>
 
-typedef eoMaximizingFitness FitT;
+typedef eoMinimizingFitness FitT;
 typedef eoBitParticle < FitT > Particle;
 
 double binary_value(const Particle& _particle);
