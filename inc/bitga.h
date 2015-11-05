@@ -6,11 +6,11 @@
 #include <ga.h>
 
 //Individual type: Bitstring
-typedef eoBit<double> Indi;
+typedef eoMinimizingFitness FitT;
+typedef eoBit<FitT> Indi;
 
 double maxsat(const Indi& _indi);
-double minsat(const Indi& _indi);
-void run_ga(const unsigned int seed, SatProblem& p);
+void run_ga(SatProblem& p);
 void ga_main_function(int argc, char** argv);
 
 #endif

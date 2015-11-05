@@ -8,8 +8,8 @@
 
 int main(int argc, char** argv) {
 	try {
-		//ga_main_function(argc, argv);
-		pso_main_function(argc, argv);
+		ga_main_function(argc, argv);
+		//pso_main_function(argc, argv);
 	} catch (std::exception& e) {
 		std::cout << "Exception: " << e.what() << '\n';
 	}

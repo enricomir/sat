@@ -7,6 +7,9 @@
 #include <utils/eoRNG.h>
 #include <eoSecondsElapsedContinue.h>
 
+#include <string>
+#include <sqlite3.h>
+
 namespace eo {
 	extern eoRng rng;
 }
@@ -16,18 +19,10 @@ using eo::rng;
 
 
 std::string filename;
+std::string pro_category;
+std::string pro_name;
 
 double maxsat(const Indi& _indi) {
-	SatProblem p(filename);
-	for (int i = 0; i < _indi.size(); ++i) {
-		p.variables[i] = _indi[i];
-		p.allocated[i] = true;
-	}
-
-	return p.eval();
-}
-
-double minsat(const Indi& _indi) {
 	SatProblem p(filename);
 	for (int i = 0; i < _indi.size(); ++i) {
 		p.variables[i] = _indi[i];
@@ -38,18 +33,80 @@ double minsat(const Indi& _indi) {
 	return p.false_clauses;
 }
 
-void run_ga(const unsigned int seed, SatProblem& p) {
-	const unsigned int SEED = seed;     //Seed
-	const unsigned int T_SIZE = 3;    //Tournament size
+void save(
+		double result, 
+		unsigned int pop,
+		double xover_rate, 
+		std::string xover_method,
+		double mut_rate,
+		std::string mut_method,
+		double mut_param,
+		std::string sel_method,
+		double sel_param
+		) {
+
+	std::string query;
+	query  = "insert into ga values(\"";
+	query += pro_category;
+
+	query += "\",\"";
+	query += pro_name;
+	query += "\"";
+
+	query += ", ";
+	query += to_string(pop);
+
+	query += ", \"";
+	query += xover_method;
+	query += "\"";
+
+	query += ", ";
+	query += to_string(xover_rate);
+
+	query += ", ";
+	query += to_string(mut_rate);
+
+	query += ", \"";
+	query += mut_method;
+	query += "\"";
+
+	query += ", ";
+	query += to_string(mut_param);
+
+	query += ", \"";
+	query += sel_method;
+	query += "\"";
+
+	query += ", ";
+	query += to_string(sel_param);
+
+	query += ", ";
+	query += to_string(result);
+	query += ")";
+
+	cout << query << "\n";
+
+	sqlite3* db;
+	while (sqlite3_open("results/results.db", &db)!=SQLITE_OK) ;
+
+	sqlite3_stmt* stmt;
+	while (sqlite3_prepare(db, query.c_str(), -1, &stmt, NULL)!=SQLITE_OK);
+
+	while (sqlite3_step(stmt)!=SQLITE_DONE);
+
+	sqlite3_finalize(stmt);
+	sqlite3_close(db);
+}
+
+void run_ga(SatProblem& p) {
+	const unsigned int T_SIZE = 5;    //Tournament size
 	const unsigned int VEC_SIZE = p.variables.size();  //Number of bits in genotype
-	const unsigned int POP_SIZE = 100; //Pop Size
-	const     float CROSS_RATE=0.8;   //Crossover rate
-	const double P_MUT_PER_BIT = 0.01;//Probability bitflip
-	const float MUT_RATE       = 1.0; //Mutation rate
+	const unsigned int POP_SIZE = 50; //Pop Size
+	const     float CROSS_RATE=0.6;   //Crossover rate
+	const double P_MUT_PER_BIT = 0.01;//Probability bitflip - number bit flipped
+	const float MUT_RATE       = 0.05; //Mutation rate
 
-	rng.reseed(SEED); // Seed rng not-randomly
-
-	eoEvalFuncPtr<Indi> eval(maxsat); //EvalFunc object
+	eoEvalFuncPtr<Indi, double, const Indi&> eval(maxsat); //EvalFunc object
 
 	eoPop<Indi> pop; //Population
 	for (unsigned int igeno=0; igeno<POP_SIZE; igeno++) {
@@ -62,17 +119,11 @@ void run_ga(const unsigned int seed, SatProblem& p) {
 		eval(v); //Avalia
 		pop.push_back(v); //Poe na pop total
 	}
-
-	//Sort a populacao
-	pop.sort();
-
-	//cout << "Initial pop: "<<endl;
-	//cout << pop;
-
+	
 	//Robust tournament selection type
-	eoDetTournamentSelect<Indi> tourn(T_SIZE); //T_SIZE tem que estar entre 2[POP_SIZE]
+	eoDetTournamentSelect<Indi> select(T_SIZE); //T_SIZE tem que estar entre 2[POP_SIZE]
 	//Roulette
-	eoProportionalSelect<Indi> roulette;
+	//eoProportionalSelect<Indi> select;
 	//Stochastic Tournament
 	//eoStochTournamentSelect<Indi> select(0.7);
 	
@@ -82,32 +133,42 @@ void run_ga(const unsigned int seed, SatProblem& p) {
 	//1pt crossover
 	eo1PtBitXover<Indi> xover;
 	//Mutation
-	eoBitMutation<Indi> mutation(P_MUT_PER_BIT);
+	//eoBitMutation<Indi> mutation(P_MUT_PER_BIT);
+	eoDetBitFlip<Indi> mutation(P_MUT_PER_BIT * VEC_SIZE);
 
 	//Termination condition
 	//eoGenContinue<Indi> continuator(MAX_GEN);
-	eoSecondsElapsedContinue<Indi> continuator(30);
+	eoSecondsElapsedContinue<Indi> continuator(15);
 
-	{
 		//StardardGA = SGA
-		eoSGA<Indi> gga(tourn, xover, CROSS_RATE, mutation, MUT_RATE, eval, continuator);
+		eoSGA<Indi> gga(select, xover, CROSS_RATE, mutation, MUT_RATE, eval, continuator);
 		gga(pop); //APLICA O SGA!
-	}
-
-	{
-		//StardardGA = SGA
-		eoSGA<Indi> gga(roulette, xover, CROSS_RATE, mutation, MUT_RATE, eval, continuator);
-		gga(pop); //APLICA O SGA!
-	}
-
+	
 	pop.sort();
-	//cout << "Final Pop:\n" << pop << endl;
-	cout << filename << " " << maxsat(pop[0]) << "\n";
+
+	save(
+			pop[0].fitness(),
+			POP_SIZE,
+			CROSS_RATE,
+			"1pt xover",
+			MUT_RATE,
+			"detbitflip",
+		  P_MUT_PER_BIT,
+			"tournament",
+			T_SIZE
+			);
 }
 
 void ga_main_function(int argc, char** argv) {
-	filename=argv[1];
+	filename = "dat/cnf/";
+	filename += argv[1];
+	filename += "/";
+	filename += argv[2];
+
+	pro_category = argv[1];
+	pro_name = argv[2];
+
 	SatProblem p(filename);
-	run_ga(42, p);
+	run_ga(p);
 }
 

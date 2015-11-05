@@ -50,7 +50,7 @@ void save(
 	query += "\",\"";
 	query += problem_name;
 
-	query += "\", \"ring\", ";
+	query += "\", \"linear\", ";
 
 	query += to_string(n_size);
 	query += ", ";
@@ -109,7 +109,8 @@ void run_pso(SatProblem& p)
 	eoEvalFuncPtr<Particle, double, const Particle& > eval(  binary_value );
 
 	// ring topology
-	eoRingTopology<Particle> topology(NEIGHBORHOOD_SIZE);
+	//eoRingTopology<Particle> topology(NEIGHBORHOOD_SIZE);
+	eoLinearTopology<Particle> topology(NEIGHBORHOOD_SIZE);
 
 	// position initialization
 	eoUniformGenerator<bool> uGen;
@@ -132,7 +133,7 @@ void run_pso(SatProblem& p)
 
 	eoSigBinaryFlight <Particle> flight;
 
-	eoSecondsElapsedContinue<Particle> genCont(30);
+	eoSecondsElapsedContinue<Particle> genCont(15);
 
 	eoEasyPSO<Particle> pso(genCont, eval, velocity, flight);
 	pso(pop);

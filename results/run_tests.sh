@@ -1,8 +1,8 @@
 #!/usr/bin/fish
 
-for x in (seq 30)
-	for dir in (ls dat/cnf)
-		for file in (ls dat/cnf/$dir)
+for dir in (ls dat/cnf)
+	for file in (ls dat/cnf/$dir)
+		for x in (seq 10)
 			./bin/opt.app $dir $file
 		end
 	end
