@@ -4,7 +4,7 @@ CXXFLAGS := -g -O3 -std=c++11
 INCLUDES := -I./inc/ -I/usr/include/paradiseo -I/usr/include/paradiseo/eo
 LIBS := /usr/lib64/libcma.a /usr/lib64/libeo.a /usr/lib64/libeoutils.a /usr/lib64/libes.a /usr/lib64/libga.a /usr/lib64/libmoeo.a -lsqlite3
 
-OPT_OBJ := obj/SatProblem.o obj/bitga.o obj/BnB.o obj/main.o obj/binarypso.o
+OPT_OBJ := obj/SatProblem.o obj/bitga.o obj/BnB.o obj/main.o obj/binarypso.o obj/meta_features.o
 OPT_BIN := opt.app
 
 $(phony all): opt
