@@ -50,7 +50,7 @@ void save(
 	query += "\",\"";
 	query += problem_name;
 
-	query += "\", \"linear\", ";
+	query += "\", \"ring\", ";
 
 	query += to_string(n_size);
 	query += ", ";
@@ -87,14 +87,14 @@ void save(
 void run_pso(SatProblem& p)
 {
 	const unsigned int VEC_SIZE = p.variables.size();
-	const unsigned int POP_SIZE = 20;
-	const unsigned int NEIGHBORHOOD_SIZE= 3;
+	const unsigned int POP_SIZE = 50;
+	const unsigned int NEIGHBORHOOD_SIZE= 2;
 
 	const double VELOCITY_INIT_MIN= -1;
 	const double VELOCITY_INIT_MAX= 1;
 
-	const double VELOCITY_MIN= -1.5;
-	const double VELOCITY_MAX= 1.5;
+	const double VELOCITY_MIN= -1;
+	const double VELOCITY_MAX= 1;
 
 	const double INERTIA= 1;
 	const double LEARNING_FACTOR1= 1.7;
@@ -109,8 +109,8 @@ void run_pso(SatProblem& p)
 	eoEvalFuncPtr<Particle, double, const Particle& > eval(  binary_value );
 
 	// ring topology
-	//eoRingTopology<Particle> topology(NEIGHBORHOOD_SIZE);
-	eoLinearTopology<Particle> topology(NEIGHBORHOOD_SIZE);
+	eoRingTopology<Particle> topology(NEIGHBORHOOD_SIZE);
+	//eoLinearTopology<Particle> topology(NEIGHBORHOOD_SIZE);
 
 	// position initialization
 	eoUniformGenerator<bool> uGen;

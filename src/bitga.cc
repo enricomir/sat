@@ -99,12 +99,13 @@ void save(
 }
 
 void run_ga(SatProblem& p) {
-	const unsigned int T_SIZE = 5;    //Tournament size
+	//const unsigned int T_SIZE = 3;    //Tournament size
+	const double T_SIZE = 0.7;
 	const unsigned int VEC_SIZE = p.variables.size();  //Number of bits in genotype
-	const unsigned int POP_SIZE = 50; //Pop Size
-	const     float CROSS_RATE=0.6;   //Crossover rate
+	const unsigned int POP_SIZE = 70; //Pop Size
+	const     float CROSS_RATE=0.8;   //Crossover rate
 	const double P_MUT_PER_BIT = 0.01;//Probability bitflip - number bit flipped
-	const float MUT_RATE       = 0.05; //Mutation rate
+	const float MUT_RATE       = 0.9; //Mutation rate
 
 	eoEvalFuncPtr<Indi, double, const Indi&> eval(maxsat); //EvalFunc object
 
@@ -121,20 +122,21 @@ void run_ga(SatProblem& p) {
 	}
 	
 	//Robust tournament selection type
-	eoDetTournamentSelect<Indi> select(T_SIZE); //T_SIZE tem que estar entre 2[POP_SIZE]
+	//eoDetTournamentSelect<Indi> select(T_SIZE); //T_SIZE tem que estar entre 2[POP_SIZE]
 	//Roulette
 	//eoProportionalSelect<Indi> select;
 	//Stochastic Tournament
-	//eoStochTournamentSelect<Indi> select(0.7);
+	eoStochTournamentSelect<Indi> select(T_SIZE);
 	
 
 	//Variation operators
 	//
 	//1pt crossover
-	eo1PtBitXover<Indi> xover;
+	//eo1PtBitXover<Indi> xover;
+	eoNPtsBitXover<Indi> xover;
 	//Mutation
-	//eoBitMutation<Indi> mutation(P_MUT_PER_BIT);
-	eoDetBitFlip<Indi> mutation(P_MUT_PER_BIT * VEC_SIZE);
+	eoBitMutation<Indi> mutation(P_MUT_PER_BIT);
+	//eoDetBitFlip<Indi> mutation(P_MUT_PER_BIT * VEC_SIZE);
 
 	//Termination condition
 	//eoGenContinue<Indi> continuator(MAX_GEN);
@@ -150,11 +152,11 @@ void run_ga(SatProblem& p) {
 			pop[0].fitness(),
 			POP_SIZE,
 			CROSS_RATE,
-			"1pt xover",
+			"2pt xover",
 			MUT_RATE,
-			"detbitflip",
+			"bitflip",
 		  P_MUT_PER_BIT,
-			"tournament",
+			"stoch_tourn",
 			T_SIZE
 			);
 }

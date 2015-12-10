@@ -3,6 +3,8 @@
 **/.makepp/*
 *.swp
 dat/*
+dat-pilot/*
+dat-pilot
 
 # Compiled Object files
 *.slo
