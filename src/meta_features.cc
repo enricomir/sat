@@ -6,6 +6,8 @@
 #include <numeric>
 #include <cmath>
 #include <algorithm>
+#include <cfloat>
+#include <cmath>
 
 using std::to_string;
 
@@ -66,6 +68,7 @@ void balance(std::string category, std::string problem) {
 	// Positive to negative ratio
 	std::vector<double> pos_to_neg_ratio;
 	
+	int i = 0;
 	for (auto c: p.clauses) {
 		double positive = 0.0, negative = 0.0;
 		for (auto i: c) {
@@ -78,7 +81,9 @@ void balance(std::string category, std::string problem) {
 		pos_to_neg_ratio.push_back(positive/(positive+negative));
 	}
 
-	std::cout << "Read pos to negative clauses, start statistics.\n";
+	std::cout 
+		<< "Read pos to negative clauses (size " << pos_to_neg_ratio.size() <<
+		"), start statistics.\n";
 	Statistic pos_to_neg = calculate(pos_to_neg_ratio);
 
 	//Variable positive and negative statistics
@@ -104,6 +109,10 @@ void balance(std::string category, std::string problem) {
 
 	std::vector<double> var_ratio;
 	for (unsigned long int i = 0; i < p.variables.size(); ++i) {
+		//Divide by 0 error
+		if (negative_var[i] == 0)
+			negative_var[i] = 100000;
+
 		var_ratio.push_back(static_cast<double>(positive_var[i])/negative_var[i]);
 	}
 
