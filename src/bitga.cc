@@ -6,6 +6,7 @@
 
 #include <utils/eoRNG.h>
 #include <eoSecondsElapsedContinue.h>
+#include <ga/eoBitOp.h>
 
 #include <string>
 #include <sqlite3.h>

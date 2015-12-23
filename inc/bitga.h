@@ -4,6 +4,8 @@
 #include "SatProblem.hh"
 #include <eo>
 #include <ga.h>
+#include <ga/eoBit.h>
+#include <eoScalarFitness.h>
 
 //Individual type: Bitstring
 typedef eoMinimizingFitness FitT;

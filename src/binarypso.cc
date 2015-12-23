@@ -70,9 +70,9 @@ void save(
 	query += to_string(result);
 	query += ")";
 
-	cout << "\n" << query << "\n";
+	//cout << "\n" << query << "\n";
 
-	sqlite3* db;
+/*	sqlite3* db;
 	while (sqlite3_open("results/results.db", &db)!=SQLITE_OK) ;
 
 	sqlite3_stmt* stmt;
@@ -81,24 +81,29 @@ void save(
 	while (sqlite3_step(stmt)!=SQLITE_DONE);
 
 	sqlite3_finalize(stmt);
-	sqlite3_close(db);
+	sqlite3_close(db);*/
 }
 
-void run_pso(SatProblem& p)
+void run_pso(SatProblem& p,
+		unsigned int POP_SIZE, unsigned int NEIGHBORHOOD_SIZE,
+		double INERTIA, double LEARNING_FACTOR1, double LEARNING_FACTOR2)
 {
 	const unsigned int VEC_SIZE = p.variables.size();
-	const unsigned int POP_SIZE = 50;
-	const unsigned int NEIGHBORHOOD_SIZE= 2;
+//	const unsigned int POP_SIZE = 50;
+//	const unsigned int NEIGHBORHOOD_SIZE= 10;
 
 	const double VELOCITY_INIT_MIN= -1;
 	const double VELOCITY_INIT_MAX= 1;
 
-	const double VELOCITY_MIN= -1;
-	const double VELOCITY_MAX= 1;
+	const double VELOCITY_MIN= -1.5;
+	const double VELOCITY_MAX= 1.5;
 
-	const double INERTIA= 1;
-	const double LEARNING_FACTOR1= 1.7;
-	const double LEARNING_FACTOR2= 2.3;
+//	const double INERTIA= 1;
+//	const double LEARNING_FACTOR1= 1.7;
+//	const double LEARNING_FACTOR2= 2.3;
+//	const double INERTIA= 1;
+//	const double LEARNING_FACTOR1= 0.4;
+//	const double LEARNING_FACTOR2= 2.5;
 
 	//rng.reseed(SEED);
 
@@ -109,8 +114,9 @@ void run_pso(SatProblem& p)
 	eoEvalFuncPtr<Particle, double, const Particle& > eval(  binary_value );
 
 	// ring topology
-	eoRingTopology<Particle> topology(NEIGHBORHOOD_SIZE);
+	//eoRingTopology<Particle> topology(NEIGHBORHOOD_SIZE);
 	//eoLinearTopology<Particle> topology(NEIGHBORHOOD_SIZE);
+	eoStarTopology<Particle> topology;
 
 	// position initialization
 	eoUniformGenerator<bool> uGen;
@@ -139,7 +145,7 @@ void run_pso(SatProblem& p)
 	pso(pop);
 
 	pop.sort();
-//	cout << myfilename << " " << pop[0].best() << "\n";
+	cout << myfilename << " " << pop[0].best() << "\n";
 
 	save(
 		pop[0].best(), 
@@ -160,5 +166,34 @@ void pso_main_function(int argc, char** argv) {
 	problem_name = argv[2];
 
 	SatProblem p(myfilename);
-	run_pso(p);
+	for (int i = 0; i < 2; ++i) {
+		std::cout << "\n";
+		
+		int j = 0;
+		/*
+		std::cout << j++;
+		run_pso(p, 50, 10, 1, 0, 1);
+		std::cout << j++;
+		run_pso(p, 50, 10, 0.8, 1, 1);
+		std::cout << j++;
+		run_pso(p, 50, 10, 0.8, 0.9, 0.9);
+		std::cout << j++;
+		run_pso(p, 50, 10, 1, 1, 0);
+		std::cout << j++;
+		run_pso(p, 50, 10, 1.3, 1.5, 2.3);
+		std::cout << j++;
+		run_pso(p, 50, 10, 1.3, 2.3, 1.5);
+		std::cout << j++; */
+		run_pso(p, 50, 10, 0.8, 0.8, 1.3); //++
+		run_pso(p, 50, 10, 1.3, 1.9, 2.3); //++
+		run_pso(p, 30, 10, 1.3, 1.9, 2.3); //++
+		/*std::cout << j++;
+		run_pso(p, 30, 10, 1.5, 3.0, 0.7);
+		std::cout << j++;
+		run_pso(p, 70, 10, 1.3, 1.9, 2.3);
+		std::cout << j++;
+		run_pso(p, 70, 10, 1.5, 3.0, 0.7);
+		std::cout << j++;
+		run_pso(p, 90, 10, 1.3, 1.7, 2.3);*/
+	}
 }
