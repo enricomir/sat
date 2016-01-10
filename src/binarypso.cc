@@ -115,8 +115,8 @@ void run_pso(SatProblem& p,
 
 	// ring topology
 	//eoRingTopology<Particle> topology(NEIGHBORHOOD_SIZE);
-	//eoLinearTopology<Particle> topology(NEIGHBORHOOD_SIZE);
-	eoStarTopology<Particle> topology;
+	eoLinearTopology<Particle> topology(NEIGHBORHOOD_SIZE);
+//	eoStarTopology<Particle> topology;
 
 	// position initialization
 	eoUniformGenerator<bool> uGen;

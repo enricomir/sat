@@ -11,9 +11,9 @@
 int main(int argc, char** argv) {
 	try {
 		//ga_main_function(argc, argv);
-		pso_main_function(argc, argv);
-		//problem_size(argv[1], argv[2]);
-		//balance(argv[1], argv[2]);
+		//pso_main_function(argc, argv);
+		problem_size(argv[1], argv[2]);
+		balance(argv[1], argv[2]);
 		//eda_main_function(argc, argv);
 	} catch (std::exception& e) {
 		std::cout << "Exception: " << e.what() << '\n';
