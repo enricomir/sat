@@ -142,11 +142,21 @@ void run_pso(SatProblem& p,
 	eoSecondsElapsedContinue<Particle> genCont(15);
 
 	eoEasyPSO<Particle> pso(genCont, eval, velocity, flight);
-	pso(pop);
+	//pso(pop);
 
 	pop.sort();
 	cout << myfilename << " " << pop[0].best() << "\n";
 
+	{
+		cout << "Very simple test: \n";
+		for (int i = 0; i < pop.size(); ++i) {
+			for (int j = 0; j < pop[i].size(); ++j) {
+				cout << pop[i][j] << " ";
+			}
+			cout << "\n";
+		}
+
+	}
 	save(
 		pop[0].best(), 
 		NEIGHBORHOOD_SIZE,
