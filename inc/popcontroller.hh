@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <eo>
+#include <string>
 
 #include <ga.h>
 #include <ga/eoBit.h>
@@ -17,11 +18,11 @@ typedef eoMinimizingFitness FitT;
 typedef eoBitParticle<FitT> Particle;
 typedef eoBit<FitT> Indi;
 
-//TODO Must put evals!
-
 class popController {
 	public:
-		popController(const unsigned int vector_size = 0) : vector_size(vector_size), dist(vector_size) { } ; //TODO: implement initialization
+		popController(const unsigned int vector_size, const unsigned int pop_size = 0) : vector_size(vector_size), dist(vector_size) { 
+			resize(pop_size); 
+		};
 
 		const unsigned int vector_size;
 		void resize(const unsigned int new_pop_size);
@@ -35,6 +36,10 @@ class popController {
 		eoPBILDistrib<Indi> dist;
 		void update_from_dist();
 
+		void save(const std::string filename);
+		static popController load(const std::string filename);
+
+		static std::string getUUID();
 };
 
 #endif

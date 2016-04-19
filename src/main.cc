@@ -9,6 +9,8 @@
 #include "eda.hh"
 #include "popcontroller.hh"
 
+void test_popcontroller();
+
 int main(int argc, char** argv) {
 	try {
 		//ga_main_function(argc, argv);
@@ -16,6 +18,7 @@ int main(int argc, char** argv) {
 		//problem_size(argv[1], argv[2]);
 		//balance(argv[1], argv[2]);
 		//eda_main_function(argc, argv);
+		//test_popcontroller();
 		
 	} catch (std::exception& e) {
 		std::cout << "Exception: " << e.what() << '\n';
@@ -24,85 +27,100 @@ int main(int argc, char** argv) {
 }
 
 void test_popcontroller() {
-		popController p(10);
-		std::cout << "Created\n" << std::flush;
+	popController p(10);
+	std::cout << "Created\n" << std::flush;
 
-		std::cout << "Dist: ";
-		for (int i = 0; i < p.dist.size(); ++i) {
-			std::cout << p.dist.value()[i] << " ";
+	std::cout << "Dist: ";
+	for (int i = 0; i < p.dist.size(); ++i) {
+		std::cout << p.dist.value()[i] << " ";
+	}
+	std::cout << "\n";
+
+	p.resize(10);
+	std::cout << "Resized\n" << std::flush;
+	for (int i = 0; i < p.pso_pop.size(); ++i) {
+		for (int j = 0; j < p.pso_pop[i].size(); ++j) {
+			std::cout << p.pso_pop[i][j] << "" << p.ga_pop[i][j] << " ";
 		}
 		std::cout << "\n";
+	}
 
-		p.resize(10);
-		std::cout << "Resized\n" << std::flush;
-		for (int i = 0; i < p.pso_pop.size(); ++i) {
-			for (int j = 0; j < p.pso_pop[i].size(); ++j) {
-				std::cout << p.pso_pop[i][j] << "" << p.ga_pop[i][j] << " ";
-			}
-			std::cout << "\n";
+
+	for (int i = 0; i < p.pso_pop.size(); ++i) {
+		for (int j = 0; j < p.pso_pop[i].size(); ++j) {
+			p.pso_pop[i][j] = (i+j)%2;
 		}
+	}
 
-
-		for (int i = 0; i < p.pso_pop.size(); ++i) {
-			for (int j = 0; j < p.pso_pop[i].size(); ++j) {
-				p.pso_pop[i][j] = (i+j)%2;
-			}
-		}
-
-		std::cout << "Changed PSO pop\n";
-		for (int i = 0; i < p.pso_pop.size(); ++i) {
-			for (int j = 0; j < p.pso_pop[i].size(); ++j) {
-				std::cout << p.pso_pop[i][j] << "" << p.ga_pop[i][j] << " ";
-			}
-			std::cout << "\n";
-		}
-
-		p.update_from_PSO();
-
-		std::cout << "\n\nFix Pop:\n";
-		for (int i = 0; i < p.pso_pop.size(); ++i) {
-			for (int j = 0; j < p.pso_pop[i].size(); ++j) {
-				std::cout << p.pso_pop[i][j] << "" << p.ga_pop[i][j] << " ";
-			}
-			std::cout << "\n";
-		}
-		std::cout << "Dist: ";
-		for (int i = 0; i < p.dist.size(); ++i) {
-			std::cout << p.dist.value()[i] << " ";
+	std::cout << "Changed PSO pop\n";
+	for (int i = 0; i < p.pso_pop.size(); ++i) {
+		for (int j = 0; j < p.pso_pop[i].size(); ++j) {
+			std::cout << p.pso_pop[i][j] << "" << p.ga_pop[i][j] << " ";
 		}
 		std::cout << "\n";
+	}
 
+	p.update_from_PSO();
 
-		for (int i = 0; i < p.pso_pop.size(); ++i) {
-			for (int j = 0; j < p.pso_pop[i].size(); ++j) {
-				p.ga_pop[i][j] = 1-(i+j)%2;
-			}
+	std::cout << "\n\nFix Pop:\n";
+	for (int i = 0; i < p.pso_pop.size(); ++i) {
+		for (int j = 0; j < p.pso_pop[i].size(); ++j) {
+			std::cout << p.pso_pop[i][j] << "" << p.ga_pop[i][j] << " ";
 		}
+		std::cout << "\n";
+	}
+	std::cout << "Dist: ";
+	for (int i = 0; i < p.dist.size(); ++i) {
+		std::cout << p.dist.value()[i] << " ";
+	}
+	std::cout << "\n";
 
-		std::cout << "Changed GA pop\n";
-		for (int i = 0; i < p.pso_pop.size(); ++i) {
-			for (int j = 0; j < p.pso_pop[i].size(); ++j) {
-				std::cout << p.pso_pop[i][j] << "" << p.ga_pop[i][j] << " ";
-			}
-			std::cout << "\n";
+
+	for (int i = 0; i < p.pso_pop.size(); ++i) {
+		for (int j = 0; j < p.pso_pop[i].size(); ++j) {
+			p.ga_pop[i][j] = 1-(i+j)%2;
 		}
+	}
 
-		p.update_from_GA();
-
-		std::cout << "\n\nFix Pop:\n";
-		for (int i = 0; i < p.pso_pop.size(); ++i) {
-			for (int j = 0; j < p.pso_pop[i].size(); ++j) {
-				std::cout << p.pso_pop[i][j] << "" << p.ga_pop[i][j] << " ";
-			}
-			std::cout << "\n";
+	std::cout << "Changed GA pop\n";
+	for (int i = 0; i < p.pso_pop.size(); ++i) {
+		for (int j = 0; j < p.pso_pop[i].size(); ++j) {
+			std::cout << p.pso_pop[i][j] << "" << p.ga_pop[i][j] << " ";
 		}
-		std::cout << "Dist: ";
-		for (int i = 0; i < p.dist.size(); ++i) {
-			std::cout << p.dist.value()[i] << " ";
-		}
-		std::cout << "\n\n\n";
+		std::cout << "\n";
+	}
 
-		std::cout << p.dist << "\n\n\n" << p.pso_pop << "\n\n\n" << p.ga_pop;
+	p.update_from_GA();
+
+	std::cout << "\n\nFix Pop:\n";
+	for (int i = 0; i < p.pso_pop.size(); ++i) {
+		for (int j = 0; j < p.pso_pop[i].size(); ++j) {
+			std::cout << p.pso_pop[i][j] << "" << p.ga_pop[i][j] << " ";
+		}
+		std::cout << "\n";
+	}
+	std::cout << "Dist: ";
+	for (int i = 0; i < p.dist.size(); ++i) {
+		std::cout << p.dist.value()[i] << " ";
+	}
+	std::cout << "\n--------------------------------\nSaving tests\n";
+
+	//p.save("test");
+
+	popController p2 = popController::load("test");
+
+	std::cout << "Load Pop:\n";
+	for (int i = 0; i < p2.pso_pop.size(); ++i) {
+		for (int j = 0; j < p2.pso_pop[i].size(); ++j) {
+			std::cout << p2.pso_pop[i][j] << "" << p2.ga_pop[i][j] << " ";
+		}
+		std::cout << "\n";
+	}
+	std::cout << "Dist: ";
+	for (int i = 0; i < p2.dist.size(); ++i) {
+		std::cout << p2.dist.value()[i] << " ";
+	}
+	std::cout << "\n";
 }
 
 

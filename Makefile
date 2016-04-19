@@ -1,6 +1,6 @@
 # Define the symbols we might want to change:
 CXX	:= g++
-CXXFLAGS := -g -O3 -std=c++11
+CXXFLAGS := -O3 -std=c++11 #-g
 INCLUDES := -I./inc/ -I/usr/include/paradiseo -I/usr/include/paradiseo/eo
 LIBS := /usr/lib64/libcma.a /usr/lib64/libeo.a /usr/lib64/libeoutils.a /usr/lib64/libes.a /usr/lib64/libga.a /usr/lib64/libmoeo.a -lsqlite3
 
