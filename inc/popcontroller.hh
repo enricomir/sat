@@ -37,7 +37,7 @@ class popController {
 		void update_from_dist();
 
 		void save(const std::string filename);
-		static popController load(const std::string filename);
+		void load(const std::string filename);
 
 		static std::string getUUID();
 };

@@ -28,6 +28,8 @@ class mhController {
 
 		int operator()(unsigned char algo);
 
+		void refill_vectors();
+
 		std::vector<eoSGA<Indi> > ga;
 		std::vector<eoEasyPSO<Particle>> pso;
 		std::vector<eoSimpleEDA<Indi>> eda;

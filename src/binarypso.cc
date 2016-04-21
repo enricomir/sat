@@ -124,12 +124,12 @@ void run_pso(SatProblem& p,
 	pop.append (POP_SIZE, random);
 
 	// velocities initialization component
-	eoUniformGenerator < double >sGen (VELOCITY_INIT_MIN, VELOCITY_INIT_MAX);
-	eoVelocityInitFixedLength < Particle > veloRandom (VEC_SIZE, sGen);
+	eoUniformGenerator < double >sgen (VELOCITY_INIT_MIN, VELOCITY_INIT_MAX);
+	eoVelocityInitFixedLength < Particle > velorandom (VEC_SIZE, sgen);
 
-	eoFirstIsBestInit < Particle > localInit;
+	eoFirstIsBestInit < Particle > localinit;
 
-	eoInitializer <Particle> fullInit(eval,veloRandom,localInit,topology,pop);
+	eoInitializer <Particle> fullInit(eval,velorandom,localinit,topology,pop);
 
 	fullInit();
 

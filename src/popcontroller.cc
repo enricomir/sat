@@ -7,7 +7,7 @@ void popController::resize(const unsigned int new_pop_size) {
 
 	if (pso_pop.size() > new_pop_size) {
 		//Shrinks the population
-		for (unsigned int i = 0; i < (pso_pop.size() - new_pop_size); ++i) {
+		while (pso_pop.size() > new_pop_size) {
 			pso_pop.pop_back();
 		}
 
@@ -16,9 +16,13 @@ void popController::resize(const unsigned int new_pop_size) {
 	}
 
 	// Grow the population
+
+	//#1 - positions
 	eoUniformGenerator<bool> uGen;
 	eoInitFixedLength<Particle> random(vector_size, uGen);
 	pso_pop.append(new_pop_size, random);
+
+	//#2 - Velocities + first is best
 
 	ga_pop.clear();
 	for (int i = 0; i < pso_pop.size(); ++i) {
@@ -38,8 +42,9 @@ void popController::update_from_PSO() {
 	for (int i = 0; i < pso_pop.size(); ++i) {
 		Indi ind;
 		for (int j = 0; j < pso_pop[i].size(); ++j) {
-			ones[j]+= pso_pop[i][j];
-			ind.push_back(pso_pop[i][j]);
+			ones[j]+= pso_pop[i].bestPositions[j];
+			ind.push_back(pso_pop[i].bestPositions[j]);
+			pso_pop[i][j] = pso_pop[i].bestPositions[j];
 		}
 		ga_pop.push_back(ind);
 	}
@@ -66,6 +71,8 @@ void popController::update_from_GA() {
 }
 
 void popController::update_from_dist() {
+	apply<Indi>(dist, ga_pop);
+
 	for (int i = 0; i < ga_pop.size(); ++i) {
 		for (int j = 0; j < ga_pop[i].size(); ++j) {
 			pso_pop[i][j] = ga_pop[i][j];
@@ -89,7 +96,7 @@ void popController::save(const std::string filename) {
 	f << "\n";
 }
 
-popController popController::load(const std::string filename) {
+void popController::load(const std::string filename) {
 	std::ifstream f(filename+".pop");
 
 	unsigned int vec_size;
@@ -97,20 +104,27 @@ popController popController::load(const std::string filename) {
 
 	f >> vec_size >> pop_size;
 
-	popController p(vec_size, pop_size);
+	if (vec_size != vector_size) {
+		std::cout << "Different vector sizes on loading, new=" << vec_size
+			<< " old=" << vector_size << "\n";
+	}
+
+	//popController p(vec_size, pop_size);
+	//std::cout << "New popsize=" << pop_size;
+	resize(pop_size);
+	//std::cout << " After resize=" << ga_pop.size() << "\n";
 
 	for (int i = 0; i < pop_size; ++i)
 		for (int j = 0; j < vec_size; ++j) {
 			bool b;
 			f >> b;
-			p.ga_pop[i][j] = b;
+			ga_pop[i][j] = b;
 		}
-	p.update_from_GA();
+	update_from_GA();
 
 	for (int i = 0; i < vec_size; ++i)
-		f >> p.dist.value()[i];
+		f >> dist.value()[i];
 
-	return p;
 }
 
 std::string popController::getUUID() {

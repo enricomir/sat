@@ -29,10 +29,16 @@ int main(int argc, char** argv) {
 }
 
 void test_mhcontroller() {
-	SatProblem p("./dat/cnf/crafted/brock200_1.clq.cnf");
+	SatProblem p("./dat/cnf/crafted/brock400_1.clq.cnf");
 	mhController mhc(p);
-	int i = mhc(1);
-	std::cout << "Improvement: " << i << "\n";
+	mhc.pops.resize(50);
+	mhc.pops.save("t1");
+	for (int j = 0; j < mhc.pop_sizes.size(); ++j) {
+		int mh = j;//%(mhc.pop_sizes.size());
+		mhc.pops.load("t1");
+		int i = mhc(mh);
+		std::cout << "Improvement(MH=" << mh << " j=" << j << "): " << i << "\n";
+	}
 }
 
 void test_popcontroller() {
@@ -116,7 +122,9 @@ void test_popcontroller() {
 
 	//p.save("test");
 
-	popController p2 = popController::load("test");
+	//popController p2 = popController::load("test");
+	popController p2(p.vector_size);
+	p2.load("test");
 
 	std::cout << "Load Pop:\n";
 	for (int i = 0; i < p2.pso_pop.size(); ++i) {
