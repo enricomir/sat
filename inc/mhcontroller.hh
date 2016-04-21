@@ -19,14 +19,20 @@
 
 class mhController {
 	public:
-		mhController(SatProblem p);
+		mhController(SatProblem problem);
 
 		popController pops;
 		SatProblem p;
 
-			bool save;
+		bool save;
 
 		int operator()(unsigned char algo);
+
+		std::vector<eoSGA<Indi> > ga;
+		std::vector<eoEasyPSO<Particle>> pso;
+		std::vector<eoSimpleEDA<Indi>> eda;
+
+		std::vector<unsigned int> pop_sizes;
 };
 
 #endif

@@ -3,7 +3,7 @@
 #include <sstream>
 #include <numeric>
 
-SatProblem::SatProblem(std::string filename) {
+SatProblem::SatProblem(std::string filename) : name(filename) {
 #ifdef DEBUG_SATPROBLEM_CTOR
 	std::cout << "c Opening file " << filename << "\n";
 #endif

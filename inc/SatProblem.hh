@@ -8,6 +8,7 @@
 class SatProblem {
 	public:
 		SatProblem(std::string filename);
+		std::string name;
 		std::vector<bool> variables;
 		std::vector<bool> allocated;
 		std::vector<std::vector<int>> clauses;

@@ -1,10 +1,10 @@
 # Define the symbols we might want to change:
 CXX	:= g++
-CXXFLAGS := -O3 -std=c++11 #-g
+CXXFLAGS := -O0 -std=c++11 -g
 INCLUDES := -I./inc/ -I/usr/include/paradiseo -I/usr/include/paradiseo/eo
 LIBS := /usr/lib64/libcma.a /usr/lib64/libeo.a /usr/lib64/libeoutils.a /usr/lib64/libes.a /usr/lib64/libga.a /usr/lib64/libmoeo.a -lsqlite3
 
-OPT_OBJ := obj/SatProblem.o obj/bitga.o obj/BnB.o obj/main.o obj/binarypso.o obj/meta_features.o obj/eda.o obj/popcontroller.o
+OPT_OBJ := obj/SatProblem.o obj/bitga.o obj/BnB.o obj/main.o obj/binarypso.o obj/meta_features.o obj/eda.o obj/popcontroller.o obj/mhcontroller.o
 OPT_BIN := opt.app
 
 $(phony all): opt

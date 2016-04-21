@@ -8,8 +8,10 @@
 #include "meta_features.hh"
 #include "eda.hh"
 #include "popcontroller.hh"
+#include "mhcontroller.hh"
 
 void test_popcontroller();
+void test_mhcontroller();
 
 int main(int argc, char** argv) {
 	try {
@@ -19,11 +21,18 @@ int main(int argc, char** argv) {
 		//balance(argv[1], argv[2]);
 		//eda_main_function(argc, argv);
 		//test_popcontroller();
-		
+		test_mhcontroller();	
 	} catch (std::exception& e) {
 		std::cout << "Exception: " << e.what() << '\n';
 	}
 	return 0;
+}
+
+void test_mhcontroller() {
+	SatProblem p("./dat/cnf/crafted/brock200_1.clq.cnf");
+	mhController mhc(p);
+	int i = mhc(1);
+	std::cout << "Improvement: " << i << "\n";
 }
 
 void test_popcontroller() {
