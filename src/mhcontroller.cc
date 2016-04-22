@@ -39,7 +39,7 @@ mhController::mhController(SatProblem problem) : p(problem), pops(problem.variab
 }
 
 void mhController::refill_vectors() {
-	const unsigned int max_ofc = 200;
+	const unsigned int max_ofc = 2000;
 
 	static bool reset = false;
 	static eoEvalFuncPtr<Indi, double, const Indi&> eval(ga_eval);
@@ -179,8 +179,32 @@ void mhController::refill_vectors() {
 		}
 
 		//EDA #2 - Winner #2
+		{
+			static eoPBILAdditive<Indi> du(0.05, 1, 0.05, 0.01, 0);
+			eoSimpleEDA<Indi> eeda(du, funccounter, 50, continuator);
+
+			eda.push_back(eeda);
+			pop_sizes.push_back(50);
+		}
+
 		//EDA #3 - Exploratory
+		{
+			static eoPBILAdditive<Indi> du(0.1, 5, 0.30, 0.01, 5);
+			eoSimpleEDA<Indi> eeda(du, funccounter, 200, continuator);
+
+			eda.push_back(eeda);
+			pop_sizes.push_back(200);
+		}
+
 		//EDA #4 - Exploiter
+		{
+			static eoPBILAdditive<Indi> du(0.1, 1, 0.01, 0.01, 0);
+			eoSimpleEDA<Indi> eeda(du, funccounter, 30, continuator);
+
+			eda.push_back(eeda);
+			pop_sizes.push_back(30);
+		}
+
 	}
 }
 

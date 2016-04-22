@@ -1,6 +1,6 @@
 # Define the symbols we might want to change:
 CXX	:= g++
-CXXFLAGS := -O0 -std=c++11 -g
+CXXFLAGS := -O3 -std=c++11 #-g -pg
 INCLUDES := -I./inc/ -I/usr/include/paradiseo -I/usr/include/paradiseo/eo
 LIBS := /usr/lib64/libcma.a /usr/lib64/libeo.a /usr/lib64/libeoutils.a /usr/lib64/libes.a /usr/lib64/libga.a /usr/lib64/libmoeo.a -lsqlite3
 
@@ -10,7 +10,7 @@ OPT_BIN := opt.app
 $(phony all): opt
 
 $(phony opt): $(OPT_OBJ)
-	$(CXX) $(inputs) -o ./bin/$(OPT_BIN) $(LIBS)
+	$(CXX) $(inputs) $(CXXFLAGS) -o ./bin/$(OPT_BIN) $(LIBS)
 
 obj/%.o: src/%.cc
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $(input) -o $(output)

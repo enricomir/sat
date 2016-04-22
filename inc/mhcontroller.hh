@@ -24,8 +24,6 @@ class mhController {
 		popController pops;
 		SatProblem p;
 
-		bool save;
-
 		int operator()(unsigned char algo);
 
 		void refill_vectors();
