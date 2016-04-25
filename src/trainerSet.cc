@@ -83,7 +83,7 @@ void trainerSet::save_run(run r) {
 }
 
 void trainerSet::generate_parallel_input() {
-	const int num_reps = 30;
+	const int num_reps = 20;
 	std::ofstream of("parallel.script");
 	
 	auto files = get_files();
