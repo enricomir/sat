@@ -24,7 +24,7 @@ class mhController {
 		popController pops;
 		SatProblem p;
 
-		int operator()(unsigned char algo);
+		int operator()(unsigned int algo);
 
 		void refill_vectors();
 
@@ -33,6 +33,18 @@ class mhController {
 		std::vector<eoSimpleEDA<Indi>> eda;
 
 		std::vector<unsigned int> pop_sizes;
+	private:
+		bool reset;
+
+		//Eval Functions GA
+		eoEvalFuncPtr<Indi, double, const Indi&> eval;
+		eoEvalFuncCounter<Indi> funccounter;
+		eoEvalContinue<Indi> continuator;
+
+		//Eval Functions PSO
+		eoEvalFuncPtr<Particle, double, const Particle&> psoeval;
+		eoEvalFuncCounter<Particle> pso_counter;
+		eoEvalContinue<Particle> pso_continuator;
 };
 
 #endif

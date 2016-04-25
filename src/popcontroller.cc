@@ -50,6 +50,10 @@ void popController::update_from_PSO() {
 	}
 
 	for (int i = 0; i < dist.size(); ++i) {
+		if (dist.size() != pso_pop[0].size()) {
+			std::cout << "POPCONTROLLER UPDATE FROM PSO STUPID ERROR"
+				<< " distsize=" << dist.size() << " psoind=" << pso_pop[0].size() << "\n";
+		}
 		dist.value()[i] = (ones[i]*1.0)/pso_pop.size();
 	}
 }
@@ -58,11 +62,15 @@ void popController::update_from_GA() {
 	std::vector<unsigned int> ones(vector_size, 0);
 
 	//Update PSO POP
+	pso_pop.clear();
 	for (int i = 0; i < ga_pop.size(); ++i) {
+		Particle p;
 		for (int j = 0; j < ga_pop[i].size(); ++j) {
 			ones[j]+= ga_pop[i][j];
-			pso_pop[i][j] = ga_pop[i][j];
+			p.push_back(ga_pop[i][j]);
+			//pso_pop[i][j] = ga_pop[i][j];
 		}
+		pso_pop.push_back(p);
 	}
 
 	for (int i = 0; i < dist.size(); ++i) {
@@ -109,17 +117,15 @@ void popController::load(const std::string filename) {
 			<< " old=" << vector_size << "\n";
 	}
 
-	//popController p(vec_size, pop_size);
-	//std::cout << "New popsize=" << pop_size;
 	resize(pop_size);
-	//std::cout << " After resize=" << ga_pop.size() << "\n";
 
-	for (int i = 0; i < pop_size; ++i)
+	for (int i = 0; i < pop_size; ++i) {
 		for (int j = 0; j < vec_size; ++j) {
 			bool b;
 			f >> b;
 			ga_pop[i][j] = b;
 		}
+	}
 	update_from_GA();
 
 	for (int i = 0; i < vec_size; ++i)

@@ -9,6 +9,7 @@
 #include "eda.hh"
 #include "popcontroller.hh"
 #include "mhcontroller.hh"
+#include "trainerSet.hh"
 
 void test_popcontroller();
 void test_mhcontroller();
@@ -21,7 +22,20 @@ int main(int argc, char** argv) {
 		//balance(argv[1], argv[2]);
 		//eda_main_function(argc, argv);
 		//test_popcontroller();
-		test_mhcontroller();	
+		//test_mhcontroller();	
+
+		trainerSet t;
+		if (argc==1) {
+			t.generate_parallel_input();
+			std::cout << "Parallel input generated. Please run parallel < parallel.script ^ inserts.sql(on fish)";
+			return 0;
+		}
+		std::string f(argv[1]);
+		std::cout << "Trying for " << f << "\n";
+		auto r = t.run_trial(f);
+		for (auto ind_run: r) {
+			t.save_run(ind_run);
+		}
 	} catch (std::exception& e) {
 		std::cout << "Exception: " << e.what() << '\n';
 	}
@@ -32,10 +46,11 @@ void test_mhcontroller() {
 	SatProblem p("./dat/cnf/crafted/brock400_1.clq.cnf");
 	mhController mhc(p);
 	mhc.pops.resize(50);
-	mhc.pops.save("t1");
+	mhc.pops.save("./pop/t1");
+	std::cout << "MHController test: pop_sizes.size() = " << mhc.pop_sizes.size() << "\n";
 	for (int j = 0; j < mhc.pop_sizes.size(); ++j) {
 		int mh = j;//%(mhc.pop_sizes.size());
-		mhc.pops.load("t1");
+		mhc.pops.load("./pop/t1");
 		int i = mhc(mh);
 		std::cout << "Improvement(MH=" << mh << " j=" << j << "): " << i << "\n";
 	}
@@ -120,7 +135,7 @@ void test_popcontroller() {
 	}
 	std::cout << "\n--------------------------------\nSaving tests\n";
 
-	//p.save("test");
+	p.save("test");
 
 	//popController p2 = popController::load("test");
 	popController p2(p.vector_size);

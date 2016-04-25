@@ -7,6 +7,7 @@ namespace eo {
 	extern eoRng rng;
 }
 
+static const unsigned int max_ofc = 1000;
 using eo::rng;
 static std::string filename;
 static SatProblem* gp;
@@ -33,23 +34,20 @@ static double pso_eval(const Particle & _particle) {
 	return p.false_clauses;
 }
 
-mhController::mhController(SatProblem problem) : p(problem), pops(problem.variables.size()) {
+mhController::mhController(SatProblem problem) : 
+	p(problem), pops(problem.variables.size()), 
+	eval(ga_eval), funccounter(eval), continuator(funccounter, max_ofc),
+	psoeval(pso_eval), pso_counter(psoeval), pso_continuator(pso_counter, max_ofc)
+
+{
 	gp = &p;
+	reset = false;
 	refill_vectors();
 }
 
 void mhController::refill_vectors() {
-	const unsigned int max_ofc = 2000;
-
-	static bool reset = false;
-	static eoEvalFuncPtr<Indi, double, const Indi&> eval(ga_eval);
-	static eoEvalFuncCounter<Indi> funccounter(eval);
-	static eoEvalContinue<Indi> continuator(funccounter, max_ofc);
 	funccounter.value(0);
 
-	static eoEvalFuncPtr<Particle, double, const Particle&> psoeval(pso_eval);
-	static eoEvalFuncCounter<Particle> pso_counter(psoeval);
-	static eoEvalContinue<Particle> pso_continuator(pso_counter, max_ofc);
 	pso_counter.value(0);
 
 	if (reset)
@@ -83,7 +81,7 @@ void mhController::refill_vectors() {
 			static eoStochTournamentSelect<Indi> select(0.6);
 			static eo1PtBitXover<Indi> xover;
 			static eoDetBitFlip<Indi> mutation(0.1 * p.variables.size());
-			eoSGA<Indi> gga(select, xover, 0.6, mutation, 0.25, funccounter, continuator);
+			eoSGA<Indi> gga(select, xover, 0.6, mutation, 0.05, funccounter, continuator);
 			ga.push_back(gga);
 			pop_sizes.push_back(500);
 		}
@@ -153,8 +151,9 @@ void mhController::refill_vectors() {
 
 		//PSO #4 - Exploiter
 		{
-			//static eoStarTopology<Particle> top; TODO: Investigate
-			static eoLinearTopology<Particle> top(49);
+			//static eoStarTopology<Particle> top; //TODO: Investigate
+			static eoLinearTopology<Particle> top(25);
+			//static eoRingTopology<Particle> top(25);
 
 			static eoStandardVelocity<Particle> velocity(top, 1.0, 2.0, 2.5, bnds);
 
@@ -208,7 +207,7 @@ void mhController::refill_vectors() {
 	}
 }
 
-int mhController::operator()(unsigned char algo) {
+int mhController::operator()(unsigned int algo) {
 	refill_vectors();
 	static eoEvalFuncPtr<Indi, double, const Indi&> eval(ga_eval);
 	static eoEvalFuncPtr<Particle, double, const Particle&> psoeval(pso_eval);
@@ -239,7 +238,7 @@ int mhController::operator()(unsigned char algo) {
 		exit(-1);
 	}
 
-	std::cout << "Initial: " << initial << " / Final: " << fin << " Pop=" << pops.ga_pop.size() << " " << pops.pso_pop.size() << "\n";
+	//std::cout << "Initial: " << initial << " / Final: " << fin << " Pop=" << pops.ga_pop.size() << " " << pops.pso_pop.size() << "\n";
 	//return initial-fin;
 	return fin;
 }
