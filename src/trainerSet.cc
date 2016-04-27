@@ -7,17 +7,32 @@
 std::vector<std::string> trainerSet::get_files() {
 	std::vector<std::string> ret;
 
-	DIR* di = opendir("./dat/cnf/crafted/");
-	dirent* d;
-	
-	d=readdir(di); //skip .
-	d=readdir(di); //skip ..
+	{
+		DIR* di = opendir("./dat/cnf/crafted/");
+		dirent* d;
+		
+		d=readdir(di); //skip .
+		d=readdir(di); //skip ..
 
-	while ( (d=readdir(di)) != NULL) {
-		ret.push_back(std::string("./dat/cnf/crafted/")+d->d_name);
+		while ( (d=readdir(di)) != NULL) {
+			ret.push_back(std::string("./dat/cnf/crafted/")+d->d_name);
+		}
+
+		closedir(di);
 	}
+	{
+		DIR* di = opendir("./dat/cnf/random/");
+		dirent* d;
+		
+		d=readdir(di); //skip .
+		d=readdir(di); //skip ..
 
-	closedir(di);
+		while ( (d=readdir(di)) != NULL) {
+			ret.push_back(std::string("./dat/cnf/random/")+d->d_name);
+		}
+
+		closedir(di);
+	}
 
 	return ret;
 }
