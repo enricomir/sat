@@ -2,6 +2,7 @@
 **/.makepp/
 **/.makepp/*
 *.swp
+*.pop
 dat/*
 dat-pilot/*
 dat-pilot
