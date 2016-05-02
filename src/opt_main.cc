@@ -27,7 +27,7 @@ int main(int argc, char** argv) {
 		trainerSet t;
 		if (argc==1) {
 			t.generate_parallel_input();
-			std::cout << "Parallel input generated. Please run parallel < parallel.script ^ inserts.sql(on fish)";
+			std::cout << "Parallel input generated. Please run parallel < opt.parallel.script ^ opt.inserts.sql(on fish)";
 			return 0;
 		}
 		std::string f(argv[1]);

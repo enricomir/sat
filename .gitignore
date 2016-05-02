@@ -3,6 +3,7 @@
 **/.makepp/*
 *.swp
 *.pop
+*.sql
 dat/*
 dat-pilot/*
 dat-pilot
