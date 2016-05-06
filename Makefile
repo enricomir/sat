@@ -7,7 +7,7 @@ LIBS := /usr/lib64/libcma.a /usr/lib64/libeo.a /usr/lib64/libeoutils.a /usr/lib6
 OPT_OBJ := obj/SatProblem.o obj/bitga.o obj/BnB.o obj/opt_main.o obj/binarypso.o obj/meta_features.o obj/eda.o obj/popcontroller.o obj/mhcontroller.o obj/trainerSet.o 
 OPT_BIN := opt.app
 
-MFE_OBJ := obj/problemMetaFeatures.o obj/meta_main.o obj/SatProblem.o
+MFE_OBJ := obj/problemMetaFeatures.o obj/meta_main.o obj/SatProblem.o obj/popcontroller.o obj/populationMetaFeatures.o
 MFE_BIN := meta_features.app
 
 $(phony all): opt mfe
