@@ -10,13 +10,19 @@ OPT_BIN := opt.app
 MFE_OBJ := obj/problemMetaFeatures.o obj/meta_main.o obj/SatProblem.o obj/popcontroller.o obj/populationMetaFeatures.o
 MFE_BIN := meta_features.app
 
-$(phony all): opt mfe
+ML_OBJ := obj/problemMetaFeatures.o obj/learner_main.o obj/SatProblem.o obj/popcontroller.o obj/populationMetaFeatures.o obj/mhcontroller.o obj/testSet.o 
+ML_BIN := meta_learner.app
+
+$(phony all): opt mfe meta_learner
 
 $(phony opt): $(OPT_OBJ)
 	$(CXX) $(inputs) $(CXXFLAGS) -o ./bin/$(OPT_BIN) $(LIBS)
 
 $(phony mfe): $(MFE_OBJ)
 	$(CXX) $(inputs) $(CXXFLAGS) -o ./bin/$(MFE_BIN) $(LIBS)
+
+$(phony meta_learner): $(ML_OBJ)
+	$(CXX) $(inputs) $(CXXFLAGS) -o ./bin/$(ML_BIN) $(LIBS)
 
 obj/%.o: src/%.cc
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $(input) -o $(output)

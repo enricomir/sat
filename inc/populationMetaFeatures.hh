@@ -18,7 +18,7 @@ class populationMetaFeatures {
 		void generate_insert();
 		static void generate_parallel_input();
 
-	private:
+	//private:
 		static std::vector<std::string> get_files();
 		popController popc;
 

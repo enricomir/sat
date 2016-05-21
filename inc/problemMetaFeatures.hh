@@ -15,7 +15,7 @@ class problemMetaFeatures {
 		void generate_insert();
 		static void generate_parallel_input();
 
-	private:
+	//private:
 		static std::vector<std::string> get_files();
 		SatProblem p;
 		std::string problem_name;
