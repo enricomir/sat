@@ -59,33 +59,36 @@ std::vector<trainerSet::run> trainerSet::run_trial(std::string file) {
 	const int stages = 3;
 
 	for (int s = 0; s < stages; ++s) {
-		int chosen_mh = rnd(gen);
 		std::string next_pop;
-		std::cout << "MHs for stage " << s << ", pop=" << pop << "\n";
-		for (int i = 0; i < mhc.pop_sizes.size(); ++i) { //Run a MH
-			mhc.pops.load(pop);
-			unsigned int fit = mhc(i); //runs the MH
-			std::cout << i << "/" << std::flush;
+		bool chosen = false;
+		for (int replications = 0; replications < 20; replications++) {
+			int chosen_mh = rnd(gen);
+			std::cout << "MHs for stage " << s << "(" << replications << "), pop=" << pop << "\n";
+			for (int i = 0; i < mhc.pop_sizes.size(); ++i) { //Run a MH
+				mhc.pops.load(pop);
+				unsigned int fit = mhc(i); //runs the MH
+				std::cout << i << "/" << std::flush;
 
-			run r;
-			r.mh = i;
-			r.stage = s;
-			r.problem = file;
-			r.init_pop = pop;
-			r.fit = fit;
+				run r;
+				r.mh = i;
+				r.stage = s;
+				r.problem = file;
+				r.init_pop = pop;
+				r.fit = fit;
 
-			ret.push_back(r);
+				ret.push_back(r);
 
-			if (i == chosen_mh) { //Saves pop for next stage
-				next_pop = "./pop/" + popController::getUUID();
-				mhc.pops.save(next_pop);
+				if (i == chosen_mh && !chosen) { //Saves pop for next stage
+					next_pop = "./pop/" + popController::getUUID();
+					mhc.pops.save(next_pop);
+					chosen = true;
+				}
 			}
+			std::cout << "\n";
+			std::cout << "Finished stage " << s << " for problem " << file << "\n";
+			std::cout << "Next pop: " << pop << "\n";
+
 		}
-		std::cout << "\n";
-
-		std::cout << "Finished stage " << s << " for problem " << file << "\n";
-		std::cout << "Next pop: " << pop << "\n";
-
 		pop = next_pop;
 	}
 
@@ -98,13 +101,11 @@ void trainerSet::save_run(run r) {
 }
 
 void trainerSet::generate_parallel_input() {
-	const int num_reps = 20;
 	std::ofstream of("opt.parallel.script");
-	
+
 	auto files = get_files();
 
 	for (auto f: files) {
-		for (int i = 0; i < num_reps; ++i)
 			of << "./bin/opt.app " << f << "\n";
 	}
 }
