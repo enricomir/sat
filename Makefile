@@ -13,7 +13,10 @@ MFE_BIN := meta_features.app
 ML_OBJ := obj/problemMetaFeatures.o obj/learner_main.o obj/SatProblem.o obj/popcontroller.o obj/populationMetaFeatures.o obj/mhcontroller.o obj/testSet.o 
 ML_BIN := meta_learner.app
 
-$(phony all): opt mfe meta_learner
+MH_OBJ := obj/mhc_test_main.o obj/SatProblem.o obj/popcontroller.o obj/mhcontroller.o obj/mhcTestSet.o 
+MH_BIN := meta_heuristics.app
+
+$(phony all): opt mfe meta_learner meta_heuristic
 
 $(phony opt): $(OPT_OBJ)
 	$(CXX) $(inputs) $(CXXFLAGS) -o ./bin/$(OPT_BIN) $(LIBS)
@@ -23,6 +26,9 @@ $(phony mfe): $(MFE_OBJ)
 
 $(phony meta_learner): $(ML_OBJ)
 	$(CXX) $(inputs) $(CXXFLAGS) -o ./bin/$(ML_BIN) $(LIBS)
+
+$(phony meta_heuristic): $(MH_OBJ)
+	$(CXX) $(inputs) $(CXXFLAGS) -o ./bin/$(MH_BIN) $(LIBS)
 
 obj/%.o: src/%.cc
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $(input) -o $(output)

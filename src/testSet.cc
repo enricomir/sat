@@ -142,7 +142,7 @@ int testSet::get_best_match(SatProblem p, mhController mhc, int stage) {
 
 	of << std::flush;
 
-	std::system("sed -i -- 's/nan/0/g' query.csv");
+	std::system("sed -i -- 's/nan/0/g' ./models/query.csv");
 	std::system("mlpack_allkrann -m models/krann.txt -n ./models/neigh.txt -q ./models/query.csv -k 1");
 
 	std::ifstream input("./models/neigh.txt");
