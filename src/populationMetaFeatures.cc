@@ -186,6 +186,6 @@ void populationMetaFeatures::generate_insert() {
 
 		<< prob.avg << ", " << prob.stddev << ", "
 		<< prob.vc << ", " << prob.min << ", "
-		<< prob.max << ", " << prob.entropy << ")\n";
+		<< prob.max << ", " << prob.entropy << ");\n";
 }
 
