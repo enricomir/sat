@@ -7,7 +7,7 @@ namespace eo {
 	extern eoRng rng;
 }
 
-static const unsigned int max_ofc = 1000;
+static const unsigned int max_ofc = 500;
 using eo::rng;
 static std::string filename;
 static SatProblem* gp;
