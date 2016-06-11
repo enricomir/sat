@@ -57,11 +57,12 @@ std::vector<trainerSet::run> trainerSet::run_trial(std::string file) {
 
 
 	const int stages = 3;
+	const int num_replications = 15;
 
 	for (int s = 0; s < stages; ++s) {
 		std::string next_pop;
 		bool chosen = false;
-		for (int replications = 0; replications < 20; replications++) {
+			for (int replications = 0; replications < num_replications; replications++) {
 			int chosen_mh = rnd(gen);
 			std::cout << "MHs for stage " << s << "(" << replications << "), pop=" << pop << "\n";
 			for (int i = 0; i < mhc.pop_sizes.size(); ++i) { //Run a MH

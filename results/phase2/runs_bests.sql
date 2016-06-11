@@ -1,3 +1,4 @@
+truncate runs_bests;
 insert into runs_bests
 select stage, problem, pop, min(avg_fit),
 (select rb.mh from runs_avg rb where rb.stage=ra.stage and rb.pop = ra.pop and rb.problem = ra.problem
