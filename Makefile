@@ -16,7 +16,13 @@ ML_BIN := meta_learner.app
 MH_OBJ := obj/mhc_test_main.o obj/SatProblem.o obj/popcontroller.o obj/mhcontroller.o obj/mhcTestSet.o 
 MH_BIN := meta_heuristics.app
 
-$(phony all): opt mfe meta_learner meta_heuristic
+LA_OBJ := obj/la_main.o obj/la.o
+LA_BIN := learning_automata.app
+
+$(phony all): opt mfe meta_learner meta_heuristic la
+
+$(phony la): $(LA_OBJ)
+	$(CXX) $(inputs) $(CXXFLAGS) -o ./bin/$(LA_BIN) $(LIBS)
 
 $(phony opt): $(OPT_OBJ)
 	$(CXX) $(inputs) $(CXXFLAGS) -o ./bin/$(OPT_BIN) $(LIBS)
