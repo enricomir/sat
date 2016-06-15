@@ -16,7 +16,7 @@ ML_BIN := meta_learner.app
 MH_OBJ := obj/mhc_test_main.o obj/SatProblem.o obj/popcontroller.o obj/mhcontroller.o obj/mhcTestSet.o 
 MH_BIN := meta_heuristics.app
 
-LA_OBJ := obj/la_main.o obj/la.o
+LA_OBJ := obj/la_main.o obj/la.o obj/SatProblem.o obj/popcontroller.o obj/mhcontroller.o obj/populationMetaFeatures.o obj/problemMetaFeatures.o obj/la_user.o
 LA_BIN := learning_automata.app
 
 $(phony all): opt mfe meta_learner meta_heuristic la

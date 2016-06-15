@@ -214,8 +214,8 @@ int mhController::operator()(unsigned int algo) {
 	pops.resize(pop_sizes[algo]);
 	apply<Indi>(eval, pops.ga_pop);
 	pops.ga_pop.sort();
-	int initial = pops.ga_pop[0].fitness();
-	int fin = -1;
+	initial = pops.ga_pop[0].fitness();
+	fin = -1;
 
 	if (algo < ga.size()) { // Runs a GA
 		ga[algo](pops.ga_pop);

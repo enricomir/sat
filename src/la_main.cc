@@ -1,30 +1,19 @@
 #include <iostream>
 #include "la.hh"
+#include "la_user.hh"
 
 int main(int argc, char** argv) {
 	if (argc == 1) {
-		LA l;
-		l.state = 1;
-		l.choose();
-		
-		l.print();
-		l.reward(300);
-		l.print();
-
-		std::cout << "Conv: " << l.get_convergence() << "\n";
-		for (int i = 0; i < 10; ++i) {
-			l.state = i;
-			l.choose();
-			l.reward(300);
-		}
-		std::cout << "Conv: " << l.get_convergence() << "\n";
-
-		l.save("1.la");
-		l.load("1.la");
-		std::cout << "Conv load: " << l.get_convergence();
-
+		laUser::generate_parallel_input();
+		std::cout << "Parallel input generated. Please run parallel < test.rl.parallel.script ^ inserts.rl.sql(on fish)\n";
 		return 0;
 	}
+
+	laUser l;
+	std::string f(argv[1]);
+	std::cout << "Trying for " << f << "\n";
+	int r = l.run_trial(f);
+	l.save_run(f, r);
 	return 0;
 }
 

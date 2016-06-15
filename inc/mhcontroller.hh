@@ -33,6 +33,9 @@ class mhController {
 		std::vector<eoSimpleEDA<Indi>> eda;
 
 		std::vector<unsigned int> pop_sizes;
+
+		int initial;
+		int fin;
 	private:
 		bool reset;
 
