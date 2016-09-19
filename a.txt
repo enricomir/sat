@@ -1,0 +1,4 @@
+STOP in eoEvalContinue: Reached maximum number of evaluations [500]
+STOP in eoEvalContinue: Reached maximum number of evaluations [500]
+STOP in eoEvalContinue: Reached maximum number of evaluations [500]
+insert into test_runs values ('ql',"./dat/cnf/crafted/maxcut-140-630-0.8-29.cnf",231);

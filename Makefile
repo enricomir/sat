@@ -19,7 +19,13 @@ MH_BIN := meta_heuristics.app
 LA_OBJ := obj/la_main.o obj/la.o obj/SatProblem.o obj/popcontroller.o obj/mhcontroller.o obj/populationMetaFeatures.o obj/problemMetaFeatures.o obj/la_user.o
 LA_BIN := learning_automata.app
 
-$(phony all): opt mfe meta_learner meta_heuristic la
+QL_OBJ := obj/q_main.o obj/q_learn.o obj/q_user.o obj/SatProblem.o obj/popcontroller.o obj/mhcontroller.o obj/populationMetaFeatures.o obj/problemMetaFeatures.o
+QL_BIN := q_learning.app
+
+$(phony all): opt mfe meta_learner meta_heuristic la ql
+
+$(phony ql): $(QL_OBJ)
+	$(CXX) $(inputs) $(CXXFLAGS) -o ./bin/$(QL_BIN) $(LIBS)
 
 $(phony la): $(LA_OBJ)
 	$(CXX) $(inputs) $(CXXFLAGS) -o ./bin/$(LA_BIN) $(LIBS)

@@ -25,6 +25,7 @@ int main(int argc, char** argv) {
 		//test_mhcontroller();	
 
 		trainerSet t;
+std::cout << "in main\n";
 		if (argc==1) {
 			t.generate_parallel_input();
 			std::cout << "Parallel input generated. Please run parallel < opt.parallel.script ^ opt.inserts.sql(on fish)";

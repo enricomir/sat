@@ -1,19 +1,19 @@
-#ifndef LA_USER_HH
-#define LA_USER_HH
+#ifndef Q_USER_HH
+#define Q_USER_HH
 
-#include "la.hh"
+#include "q_learn.hh"
 #include <vector>
 #include "mhcontroller.hh"
 
-class laUser {
+class qUser {
 	public:
 		static std::vector<std::string> get_files(); //List all problems
 		static void generate_parallel_input();
 
-		LA las[3];
+		Q_Learn qls[3];
 		
-		laUser(bool train = true);
-		~laUser();
+		qUser(bool train = true);
+		~qUser();
 
 		int getState(SatProblem p, mhController mhc, int stage);
 
