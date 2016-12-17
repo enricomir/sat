@@ -45,9 +45,11 @@ mhcTestSet::run mhcTestSet::run_trial(int mh, std::string file) {
 	//Initializes pop from random number of individuals
 	mhc.pops.resize(mhc.pop_sizes[mh]);
 
-	unsigned int fit = mhc(mh); //runs the MH
-	fit = mhc(mh);
-	fit = mhc(mh);
+	const int stages = 10;
+	unsigned int fit = 0;
+	
+	for (int i = 0; i < stages; ++i)
+		fit = mhc(mh); //runs the MH
 
 	run r;
 	r.mh = mh;

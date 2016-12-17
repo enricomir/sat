@@ -1,0 +1,37 @@
+nohup: appending output to 'nohup.out'
+insert into test_runs values ('ql',"./dat/cnf/crafted/maxcut-140-630-0.8-29.cnf",193);
+insert into test_runs values ('ql',"./dat/cnf/crafted/p_hat700-1.clq.cnf",84);
+insert into test_runs values ('ql',"./dat/cnf/crafted/maxcut-140-630-0.7-7.cnf",277);
+insert into test_runs values ('ql',"./dat/cnf/crafted/maxcut-140-630-0.7-36.cnf",280);
+insert into test_runs values ('ql',"./dat/cnf/crafted/p_hat1000-1.clq.cnf",69);
+insert into test_runs values ('ql',"./dat/cnf/crafted/maxcut-140-630-0.7-10.cnf",199);
+insert into test_runs values ('ql',"./dat/cnf/crafted/brock800_2.clq.cnf",228);
+insert into test_runs values ('ql',"./dat/cnf/crafted/maxcut-140-630-0.8-17.cnf",271);
+insert into test_runs values ('ql',"./dat/cnf/crafted/san200_0.9_2.clq.cnf",321);
+insert into test_runs values ('ql',"./dat/cnf/crafted/maxcut-140-630-0.8-47.cnf",281);
+insert into test_runs values ('ql',"./dat/cnf/crafted/maxcut-140-630-0.8-48.cnf",204);
+insert into test_runs values ('ql',"./dat/cnf/crafted/c-fat500-10.clq.cnf",200);
+insert into test_runs values ('ql',"./dat/cnf/crafted/maxcut-140-630-0.7-32.cnf",216);
+insert into test_runs values ('ql',"./dat/cnf/crafted/sanr400_0.5.clq.cnf",177);
+insert into test_runs values ('ql',"./dat/cnf/crafted/san400_0.7_3.clq.cnf",251);
+insert into test_runs values ('ql',"./dat/cnf/crafted/maxcut-140-630-0.7-29.cnf",276);
+insert into test_runs values ('ql',"./dat/cnf/crafted/maxcut-140-630-0.7-47.cnf",270);
+insert into test_runs values ('ql',"./dat/cnf/crafted/san400_0.5_1.clq.cnf",149);
+insert into test_runs values ('ql',"./dat/cnf/crafted/p_hat1000-3.clq.cnf",254);
+insert into test_runs values ('ql',"./dat/cnf/crafted/brock200_2.clq.cnf",157);
+insert into test_runs values ('ql',"./dat/cnf/crafted/hamming6-2.clq.cnf",1022);
+insert into test_runs values ('ql',"./dat/cnf/crafted/maxcut-140-630-0.8-28.cnf",272);
+insert into test_runs values ('ql',"./dat/cnf/crafted/maxcut-140-630-0.8-14.cnf",273);
+insert into test_runs values ('ql',"./dat/cnf/crafted/c-fat200-1.clq.cnf",14);
+insert into test_runs values ('ql',"./dat/cnf/crafted/san200_0.9_1.clq.cnf",328);
+insert into test_runs values ('ql',"./dat/cnf/crafted/t5pm3-7777.spn.cnf",158);
+insert into test_runs values ('ql',"./dat/cnf/crafted/maxcut-140-630-0.7-15.cnf",275);
+insert into test_runs values ('ql',"./dat/cnf/crafted/maxcut-140-630-0.7-9.cnf",273);
+insert into test_runs values ('ql',"./dat/cnf/crafted/MANN_a81.clq.cnf",399);
+insert into test_runs values ('ql',"./dat/cnf/crafted/maxcut-140-630-0.7-11.cnf",237);
+insert into test_runs values ('ql',"./dat/cnf/crafted/san400_0.7_2.clq.cnf",259);
+insert into test_runs values ('ql',"./dat/cnf/crafted/t7pm3-9999.spn.cnf",467);
+insert into test_runs values ('ql',"./dat/cnf/crafted/maxcut-140-630-0.8-27.cnf",216);
+parallel: SIGTERM received. No new jobs will be started.
+parallel: Waiting for these 1 jobs to finish. Send SIGTERM again to stop now.
+parallel: ./bin/q_learning.app ./dat/cnf/crafted/maxcut-140-630-0.8-27.cnf

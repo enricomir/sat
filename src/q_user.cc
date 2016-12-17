@@ -59,12 +59,26 @@ qUser::qUser(bool train) : train(train) {
 	qls[0].load("stage0.ql");
 	qls[1].load("stage1.ql");
 	qls[2].load("stage2.ql");
+	qls[3].load("stage3.ql");
+	qls[4].load("stage4.ql");
+	qls[5].load("stage5.ql");
+	qls[6].load("stage6.ql");
+	qls[7].load("stage7.ql");
+	qls[8].load("stage8.ql");
+	qls[9].load("stage9.ql");
 }
 
 qUser::~qUser() {
 	qls[0].save("stage0.ql");
 	qls[1].save("stage1.ql");
 	qls[2].save("stage2.ql");
+	qls[3].save("stage3.ql");
+	qls[4].save("stage4.ql");
+	qls[5].save("stage5.ql");
+	qls[6].save("stage6.ql");
+	qls[7].save("stage7.ql");
+	qls[8].save("stage8.ql");
+	qls[9].save("stage9.ql");
 }
 
 int qUser::getState(SatProblem p, mhController mhc, int stage) {
@@ -152,13 +166,14 @@ int qUser::run_trial(std::string file) {
 	mhc.pops.resize(mhc.pop_sizes[i]);
 	//std::cout << "qUser::run_trial pop created\n";
 
-	const int stages = 3;
+	//const int stages = 3;
+	const int stages = 10;;
 	int fit;
 	int ret;
 	int first;
 
 	for (int s = 0; s < stages; ++s) {
-		qls[s].state = getState(p, mhc, s);
+		qls[s].state = getState(p, mhc, s);//TODO: 10 states now but only 3 in KNN
 		qls[s].choose();
 		//std::cout << "qUser::run_trial chosen: " << qls[s].action << "\n";
 		
@@ -167,7 +182,8 @@ int qUser::run_trial(std::string file) {
 		if (s != 0) { //Reward
 			//std::cout << "qUser::run_trial rewarding intermediate\n";
 			if (train)
-				qls[s-1].reward(static_cast<float>(mhc.initial - mhc.fin)/mhc.initial, qls[s].max_reward());
+				//qls[s-1].reward(static_cast<float>(mhc.initial - mhc.fin)/mhc.initial*0.0, qls[s].max_reward());
+				qls[s-1].reward(0.0, qls[s].max_reward());
 		} else {
 			first = mhc.initial;
 		}
@@ -184,7 +200,7 @@ int qUser::run_trial(std::string file) {
 		exit(-1);
 	}
 	if (train)
-		qls[stages-1].reward(static_cast<float>(/*fit*/mhc.initial-mhc.fin)/mhc.initial/*/first*//*/mhc.fin*/, 0);
+		qls[stages-1].reward(static_cast<float>(fit)/mhc.initial, 0);
 	
 	std::cout << "\n";
 

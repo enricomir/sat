@@ -10,7 +10,8 @@ class qUser {
 		static std::vector<std::string> get_files(); //List all problems
 		static void generate_parallel_input();
 
-		Q_Learn qls[3];
+		//Q_Learn qls[3];
+		Q_Learn qls[10];
 		
 		qUser(bool train = true);
 		~qUser();
