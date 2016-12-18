@@ -9,7 +9,6 @@
 #include "problemMetaFeatures.hh"
 #include "populationMetaFeatures.hh"
 
-
 std::vector<std::string> qUser::get_files() {
 	std::vector<std::string> ret;
 
@@ -82,8 +81,9 @@ qUser::~qUser() {
 }
 
 int qUser::getState(SatProblem p, mhController mhc, int stage) {
-	std::ofstream of("./models/q_query.csv");
-
+	//std::ofstream of("./models/q_query.csv");
+	std::string place = "./train_set_2/" + popController::getUUID();
+	std::ofstream of(place);
 	of << stage << ", ";
 
 	//Problem meta features
@@ -106,7 +106,7 @@ int qUser::getState(SatProblem p, mhController mhc, int stage) {
 
 		<< b.unary << ", " << b.binary << ", " << b.ternary << ", ";
 
-	//Population meta features
+/*	//Population meta features
 	mhc.pops.save("q");
 	populationMetaFeatures pmf("q", p.variables.size());
 
@@ -138,19 +138,26 @@ int qUser::getState(SatProblem p, mhController mhc, int stage) {
 
 		<< prob.avg << ", " << prob.stddev << ", "
 		<< prob.vc << ", " << prob.min << ", "
-		<< prob.max << ", " << prob.entropy << "\n";
+		<< prob.max << ", " << prob.entropy;
+*/
+	if (stage == 0) { //First stage, no improvement
+		of << "0, 0";
+	} else { //Other stages, can measure improvement
+		of << (mhc.initial - mhc.fin) << ", ";
+		of << qls[stage-1].action;
+	}
+	of << std::endl;
 
-	of << std::flush;
+	//std::system("sed -i -- 's/nan/0/g' ./models/q_query.csv");
+	//std::system("mlpack_knn -m models/knn.txt -n ./models/q_neigh.txt -q ./models/q_query.csv -k 1");
 
-	std::system("sed -i -- 's/nan/0/g' ./models/q_query.csv");
-	std::system("mlpack_knn -m models/knn.txt -n ./models/q_neigh.txt -q ./models/q_query.csv -k 1");
+	//std::ifstream input("./models/q_neigh.txt");
+	//long i;
 
-	std::ifstream input("./models/q_neigh.txt");
-	long i;
+	//input >> i;
 
-	input >> i;
-
-	return i;
+	//return i;
+	return 0;
 }
 
 int qUser::run_trial(std::string file) {
@@ -175,8 +182,8 @@ int qUser::run_trial(std::string file) {
 	for (int s = 0; s < stages; ++s) {
 		qls[s].state = getState(p, mhc, s);//TODO: 10 states now but only 3 in KNN
 		qls[s].choose();
-		//std::cout << "qUser::run_trial chosen: " << qls[s].action << "\n";
 		
+		//std::cout << "qUser::run_trial chosen: " << qls[s].action << "\n";
 
 		ret = mhc(qls[s].action);
 		if (s != 0) { //Reward

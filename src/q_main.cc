@@ -14,7 +14,8 @@ int main(int argc, char** argv) {
 	std::string f(argv[1]);
 	std::cout << "Trying for " << f << "\n";
 	int r = q.run_trial(f);
-	q.save_run(f, r);
+	//q.save_run(f, r);
+	
 	/*
 	std::cout << "It works!\n";
 	Q_Learn q;

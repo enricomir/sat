@@ -12,8 +12,8 @@ class Q_Learn {
 		float sigma = 0.0;
 
 		Q_Learn() {
-			for (int i = 0; i < 10; i++)
-				for (int j = 0; j < 12; j++)
+			for (int i = 0; i < 10; i++) //States
+				for (int j = 0; j < 12; j++) //Actions
 					q_value[i][j] = 0;
 		}
 
